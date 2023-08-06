@@ -3,9 +3,11 @@ import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import User from "@/app/model/UserModel";
+import User from "@/app/model/User";
 import bcrypt from "bcrypt";
 import { signJwtToken } from "@/app/lib/jwt";
+import { mongooseConnect } from "@/app/lib/connectDb";
+// import db from "@/app/lib/mongodb";
 
 export const authOptions = {
   providers: [
@@ -24,6 +26,8 @@ export const authOptions = {
 
       async authorize(credentials, req) {
         const { email, password } = credentials;
+
+        await mongooseConnect();
 
         const user = await User.findOne({ email });
 
