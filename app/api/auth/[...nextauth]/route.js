@@ -3,9 +3,11 @@ import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import User from "@/app/model/UserModel";
+import User from "@/app/model/User";
 import bcrypt from "bcrypt";
 import { signJwtToken } from "@/app/lib/jwt";
+import { mongooseConnect } from "@/app/lib/connectDb";
+// import db from "@/app/lib/mongodb";
 
 export const authOptions = {
   providers: [
@@ -15,36 +17,38 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_SECRET,
     }),
 
-    CredentialsProvider({
-      type: "credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
+    // CredentialsProvider({
+    //   type: "credentials",
+    //   credentials: {
+    //     email: { label: "Email", type: "email" },
+    //     password: { label: "Password", type: "password" },
+    //   },
 
-      async authorize(credentials, req) {
-        const { email, password } = credentials;
+    //   async authorize(credentials, req) {
+    //     const { email, password } = credentials;
 
-        const user = await User.findOne({ email });
+    //     await mongooseConnect();
 
-        if (!user) {
-          throw new Error("Invalid credentials");
-        }
+    //     const user = await User.findOne({ email });
 
-        const comparePassword = await bcrypt.compare(password, user.password);
+    //     if (!user) {
+    //       throw new Error("Invalid credentials");
+    //     }
 
-        if (!comparePassword) {
-          throw new Error("Invalid credentials");
-        } else {
-          const { password, ...currentUser } = user._doc;
-          const accessToken = signJwtToken(currentUser, { expiresIn: "3d" });
-          return {
-            ...currentUser,
-            accessToken,
-          };
-        }
-      },
-    }),
+    //     const comparePassword = await bcrypt.compare(password, user.password);
+
+    //     if (!comparePassword) {
+    //       throw new Error("Invalid credentials");
+    //     } else {
+    //       const { password, ...currentUser } = user._doc;
+    //       const accessToken = signJwtToken(currentUser, { expiresIn: "3d" });
+    //       return {
+    //         ...currentUser,
+    //         accessToken,
+    //       };
+    //     }
+    //   },
+    // }),
   ],
 
   pages: {
@@ -57,6 +61,7 @@ export const authOptions = {
         token.accessToken = user.accessToken;
         token._id = user._id;
       }
+      console.log("token", token);
       return token;
     },
     async session({ session, token }) {
@@ -67,6 +72,8 @@ export const authOptions = {
           email: token.email,
         };
       }
+
+      console.log("session", session);
       return session;
     },
   },

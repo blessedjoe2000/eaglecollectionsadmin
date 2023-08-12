@@ -1,12 +1,20 @@
 "use client";
 
 import { useSession, signIn, signOut } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 function Login() {
   const { data: session } = useSession();
 
   const router = useRouter();
+
+  useEffect(() => {
+    if (session) {
+      console.log("session", session);
+      router.push("/");
+    }
+  }, [session]);
 
   if (!session) {
     return (
@@ -22,8 +30,6 @@ function Login() {
       </div>
     );
   }
-
-  router.push("/");
 }
 
 export default Login;
