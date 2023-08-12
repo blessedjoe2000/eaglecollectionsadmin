@@ -17,38 +17,38 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_SECRET,
     }),
 
-    CredentialsProvider({
-      type: "credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
+    // CredentialsProvider({
+    //   type: "credentials",
+    //   credentials: {
+    //     email: { label: "Email", type: "email" },
+    //     password: { label: "Password", type: "password" },
+    //   },
 
-      async authorize(credentials, req) {
-        const { email, password } = credentials;
+    //   async authorize(credentials, req) {
+    //     const { email, password } = credentials;
 
-        await mongooseConnect();
+    //     await mongooseConnect();
 
-        const user = await User.findOne({ email });
+    //     const user = await User.findOne({ email });
 
-        if (!user) {
-          throw new Error("Invalid credentials");
-        }
+    //     if (!user) {
+    //       throw new Error("Invalid credentials");
+    //     }
 
-        const comparePassword = await bcrypt.compare(password, user.password);
+    //     const comparePassword = await bcrypt.compare(password, user.password);
 
-        if (!comparePassword) {
-          throw new Error("Invalid credentials");
-        } else {
-          const { password, ...currentUser } = user._doc;
-          const accessToken = signJwtToken(currentUser, { expiresIn: "3d" });
-          return {
-            ...currentUser,
-            accessToken,
-          };
-        }
-      },
-    }),
+    //     if (!comparePassword) {
+    //       throw new Error("Invalid credentials");
+    //     } else {
+    //       const { password, ...currentUser } = user._doc;
+    //       const accessToken = signJwtToken(currentUser, { expiresIn: "3d" });
+    //       return {
+    //         ...currentUser,
+    //         accessToken,
+    //       };
+    //     }
+    //   },
+    // }),
   ],
 
   pages: {
@@ -61,6 +61,7 @@ export const authOptions = {
         token.accessToken = user.accessToken;
         token._id = user._id;
       }
+      console.log("token", token);
       return token;
     },
     async session({ session, token }) {
@@ -71,6 +72,8 @@ export const authOptions = {
           email: token.email,
         };
       }
+
+      console.log("session", session);
       return session;
     },
   },
