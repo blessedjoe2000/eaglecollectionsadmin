@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.css";
 
 export default function Products() {
   const [allProducts, setAllProducts] = useState([]);
+
   const getAllProducts = async () => {
     const response = await axios.get("/api/products");
     setAllProducts(response.data);
