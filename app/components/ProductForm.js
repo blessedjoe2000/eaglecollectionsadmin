@@ -1,8 +1,10 @@
 import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function ProductForm({
+  _id,
   title: existingTitle,
   description: existingDescription,
   price: existingPrice,
@@ -15,8 +17,15 @@ export default function ProductForm({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const productData = { title, description, price };
-    await axios.post("/api/products", productData);
+    if (_id) {
+      //update product
+      await axios.patch(`/api/products/${_id}`, { ...productData });
+    } else {
+      //create product
+      await axios.post("/api/products", productData);
+    }
     router.push("/products");
   };
 
@@ -63,10 +72,13 @@ export default function ProductForm({
         />
       </div>
 
-      <div className="">
+      <div className="flex gap-2">
         <button type="submit" className=" btn-form">
           Save
         </button>
+        <Link href={"/products"} className="btn-cancel">
+          Cancel
+        </Link>
       </div>
     </form>
   );

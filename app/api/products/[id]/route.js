@@ -14,3 +14,56 @@ export async function GET(req, ctx) {
     return new Response(JSON.stringify(error.message), { status: 500 });
   }
 }
+
+export async function PATCH(req, ctx) {
+  await mongooseConnect();
+
+  const { id } = ctx.params;
+  try {
+    const productUpdate = await req.json();
+
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return new Response(JSON.stringify({ message: "product not found" }), {
+        status: 403,
+      });
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      {
+        $set: { ...productUpdate },
+      },
+      { new: true }
+    );
+
+    return new Response(JSON.stringify(updatedProduct), { status: 200 });
+  } catch (error) {
+    return new Response(JSON.stringify(error.message), { status: 500 });
+  }
+}
+
+export async function DELETE(req, ctx) {
+  await mongooseConnect();
+
+  const { id } = ctx.params;
+  try {
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return new Response(JSON.stringify({ message: "product not found" }), {
+        status: 403,
+      });
+    }
+
+    await Product.findByIdAndDelete(id);
+
+    return new Response(
+      JSON.stringify({ message: `product id ${id} deleted successfully` }),
+      { status: 200 }
+    );
+  } catch (error) {
+    return new Response(JSON.stringify(error.message), { status: 500 });
+  }
+}

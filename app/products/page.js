@@ -18,6 +18,7 @@ export default function Products() {
   useEffect(() => {
     getAllProducts();
   }, []);
+
   return (
     <Layout>
       <Link
@@ -48,8 +49,8 @@ export default function Products() {
                       Edit
                     </Link>
                     <Link
-                      className="bg-purple-500 text-white px-3 py-1 rounded-md no-underline"
-                      href={"/products/:id" + product._id}
+                      href={`/products/delete/${product._id}`}
+                      className="btn-delete"
                     >
                       Delete
                     </Link>
