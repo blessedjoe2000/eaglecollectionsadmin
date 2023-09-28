@@ -6,27 +6,86 @@ import { useState } from "react";
 export default function ProductForm({
   _id,
   title: existingTitle,
+  images: existingImages,
   description: existingDescription,
   price: existingPrice,
 }) {
+  // const CLOUD_NAME = "dpn75vlns";
+  // const UPLOAD_PRESET = "eaglecollections";
+
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setDescription] = useState(existingDescription || "");
   const [price, setPrice] = useState(existingPrice || "");
+  const [images, setImages] = useState(existingImages || []);
 
   const router = useRouter();
+
+  const uploadImages = async (e) => {
+    const files = e.target?.files;
+
+    if (!files) return;
+
+    const filesArray = Array.from(files);
+
+    if (filesArray?.length > 0) {
+      const formData = new FormData();
+
+      filesArray.forEach((file) => formData.append("file", file));
+
+      const response = await axios.post(`/api/upload`, formData);
+
+      console.log("response", response);
+    }
+
+    // Object.keys(files)?.forEach((file) => {
+    //   formData.append("file", images);
+    //   formData.append("upload_preset", UPLOAD_PRESET);
+    // });
+
+    // try {
+    //   console.log("formData", formData);
+    //   const response = await fetch(
+    //     `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+    //     { method: "POST", body: formData }
+    //   );
+
+    //   const data = await response.json();
+
+    //   console.log("data", data);
+    //   const photoUrl = data["secure_url"];
+
+    //   return photoUrl;
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const productData = { title, description, price };
-    if (_id) {
-      //update product
-      await axios.patch(`/api/products/${_id}`, { ...productData });
-    } else {
-      //create product
-      await axios.post("/api/products", productData);
+    const photoUrl = await uploadImages();
+    setImages(photoUrl);
+
+    console.log("photoUrl", photoUrl);
+    const productData = { title, description, price, images };
+
+    if (!title || !price) {
+      console.log("title and price is required");
+      return;
     }
-    router.push("/products");
+
+    try {
+      if (_id) {
+        //update product
+        await axios.patch(`/api/products/${_id}`, { ...productData });
+      } else {
+        //create product
+        await axios.post("/api/products", productData);
+      }
+      router.push("/products");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -55,6 +114,39 @@ export default function ProductForm({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         ></textarea>
+      </div>
+      <label>Photos </label>
+      <div>
+        <label
+          htmlFor="images"
+          className="w-24 h-24 cursor-pointer bg-gray-200 rounded-lg text-gray-900 p-2 flex flex-col justify-center items-center text-sm"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+            />
+          </svg>
+          Upload
+        </label>
+        <input
+          className="hidden"
+          name="images"
+          id="images"
+          type="file"
+          onChange={uploadImages}
+        ></input>
+        {!images?.length && (
+          <div className="mb-2">No photos for this product</div>
+        )}
       </div>
 
       <div>

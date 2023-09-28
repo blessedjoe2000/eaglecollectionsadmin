@@ -14,6 +14,10 @@ export default function DeleteProduct() {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
+    if (!id) {
+      return;
+    }
+
     axios.get(`/api/products/${id}`).then((response) => {
       setProduct(response.data);
     });

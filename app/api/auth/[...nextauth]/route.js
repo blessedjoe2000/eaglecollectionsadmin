@@ -61,7 +61,6 @@ export const authOptions = {
         token.accessToken = user.accessToken;
         token._id = user._id;
       }
-      console.log("token", token);
       return token;
     },
     async session({ session, token }) {
@@ -73,7 +72,6 @@ export const authOptions = {
         };
       }
 
-      console.log("session", session);
       return session;
     },
   },
