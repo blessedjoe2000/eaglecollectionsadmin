@@ -38,36 +38,86 @@
 //   api: { bodyParser: false },
 // };
 
-import { Buffer } from "buffer";
-import { decode } from "node-base64-image";
+// import { Buffer } from "buffer";
+// import { decode } from "node-base64-image";
+// import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
-function makeId(length = 10) {
-  let result = "";
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const charactersLength = characters.length;
-  for (let i = 0; i < charactersLength; i++) {
-    result += characters.charAt(Math.random() * charactersLength);
-  }
-  return result;
+// function makeId(length = 10) {
+//   let result = "";
+//   const characters =
+//     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+//   const charactersLength = characters.length;
+//   for (let i = 0; i < charactersLength; i++) {
+//     result += characters.charAt(Math.random() * charactersLength);
+//   }
+//   return result;
+// }
+
+import { extname, join } from "path";
+import { stat, mkdir, writeFile } from "fs/promises";
+import * as dateFn from "date-fns";
+import { NextRequest, NextResponse } from "next/server";
+
+function sanitizeFilename(filename) {
+  return filename.replace(/[^a-zA-Z0-9_\u0600-\u06FF.]/g, "_");
 }
 
-export async function POST(req) {
-  try {
-    const formData = await req.formData();
+export async function POST(request, res) {
+  const formData = await request.formData();
 
-    const file = formData.get("file");
-    let nameFile = makeId(10);
-    const fileData = await file.arrayBuffer();
-    const buffer = Buffer.from(fileData);
-    const base64Data = buffer.toString("base64");
-    console.log("file", file);
-    await decode(base64Data, { fname: "../images/" + nameFile, ext: "png" });
-    return new Response(JSON.stringify({ message: "successful" }));
-  } catch (error) {
-    console.log(error);
-    return new Response(JSON.stringify({ error: "Server side error" }), {
-      status: 500,
-    });
+  const file = formData.get("file");
+  if (!file) {
+    return NextResponse.json(
+      { error: "File blob is required." },
+      { status: 400 }
+    );
+  }
+
+  const buffer = Buffer.from(await file.arrayBuffer());
+
+  const pathDist = join(process.cwd(), "/public/images");
+  const relativeUploadDir = `${dateFn.format(Date.now(), "dd-MM-Y")}`;
+  const uploadDir = join(pathDist, relativeUploadDir);
+
+  try {
+    await stat(uploadDir);
+  } catch (e) {
+    if (e.code === "ENOENT") {
+      await mkdir(uploadDir, { recursive: true });
+    } else {
+      console.error(
+        "Error while trying to create directory when uploading a file\n",
+        e
+      );
+      return NextResponse.json(
+        { error: "Something went wrong." },
+        { status: 500 }
+      );
+    }
+  }
+
+  try {
+    const uniqueSuffix = `${Date.now()}_${Math.round(Math.random() * 1e9)}`;
+    const fileExtension = extname(file.name);
+    const originalFilename = file.name.replace(/\.[^/.]+$/, "");
+    const sanitizedFilename = sanitizeFilename(originalFilename);
+    const filename = `${sanitizedFilename}_${uniqueSuffix}${fileExtension}`;
+    console.log("filename : " + filename);
+    await writeFile(`${uploadDir}/${filename}`, buffer);
+
+    const finalFilePath =
+      "http://localhost:3000/images/" + `${relativeUploadDir}/${filename}`;
+
+    console.log("finalFilePath", finalFilePath);
+    return NextResponse.json(
+      { done: "ok", filename: filename, httpfilepath: finalFilePath },
+      { status: 200 }
+    );
+  } catch (e) {
+    console.error("Error while trying to upload a file\n", e);
+    return NextResponse.json(
+      { error: "Something went wrong." },
+      { status: 500 }
+    );
   }
 }
