@@ -2,16 +2,17 @@ import { mongooseConnect } from "@/app/lib/connectDb";
 import Product from "@/app/model/Product";
 
 export async function POST(req) {
-  try {
-    //connected to database
-    await mongooseConnect();
+  //connected to database
+  await mongooseConnect();
 
-    const { title, description, price } = await req.json();
+  try {
+    const { title, description, price, images } = await req.json();
 
     const productData = await Product.create({
       title,
       description,
       price,
+      images,
     });
 
     return new Response(JSON.stringify(productData), { status: 201 });
@@ -21,9 +22,9 @@ export async function POST(req) {
 }
 
 export async function GET(req) {
-  try {
-    await mongooseConnect();
+  await mongooseConnect();
 
+  try {
     const allProducts = await Product.find();
 
     return new Response(JSON.stringify(allProducts), { status: 200 });

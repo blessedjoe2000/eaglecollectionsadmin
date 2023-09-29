@@ -1,0 +1,65 @@
+import { extname, join } from "path";
+import * as dateFn from "date-fns";
+import { NextResponse } from "next/server";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import mime from "mime-types";
+
+function sanitizeFilename(filename) {
+  return filename.replace(/[^a-zA-Z0-9_\u0600-\u06FF.]/g, "_");
+}
+
+export async function POST(request) {
+  const formData = await request.formData();
+
+  const file = formData.get("file");
+  if (!file) {
+    return NextResponse.json(
+      { error: "File blob is required." },
+      { status: 400 }
+    );
+  }
+
+  const relativeUploadDir = `${dateFn.format(Date.now(), "dd-MM-Y")}`;
+
+  try {
+    const uniqueSuffix = `${Date.now()}_${Math.round(Math.random() * 1e9)}`;
+    const fileExtension = extname(file.name);
+    const originalFilename = file.name.replace(/\.[^/.]+$/, "");
+    const sanitizedFilename = sanitizeFilename(originalFilename);
+    const filename = `${sanitizedFilename}_${uniqueSuffix}${fileExtension}`;
+
+    const finalFilePath =
+      "/public/images/" + `${relativeUploadDir}/${filename}`;
+
+    const client = new S3Client({
+      region: "us-west-1",
+      credentials: {
+        accessKeyId: process.env.AWS_S3_ACCESS_KEY,
+        secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
+      },
+    });
+
+    const bucketName = "eaglecollections";
+    const links = [];
+
+    await client.send(
+      new PutObjectCommand({
+        Bucket: bucketName,
+        Key: filename,
+        ACL: "public-read",
+        ContentType: mime.lookup(finalFilePath),
+      })
+    );
+
+    const link = `https://${bucketName}.s3.amazonaws.com/${filename}`;
+    links.push(link);
+
+    return NextResponse.json({ links }, { status: 200 });
+  } catch (e) {
+    console.error("Error while trying to upload a file\n", e);
+    return NextResponse.json(
+      { error: "Something went wrong." },
+      { status: 500 }
+    );
+  }
+}

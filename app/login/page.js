@@ -11,7 +11,6 @@ function Login() {
 
   useEffect(() => {
     if (session) {
-      console.log("session", session);
       router.push("/");
     }
   }, [session]);

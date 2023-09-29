@@ -23,4 +23,12 @@
   a {
     @apply no-underline;
   }
+
+  .btn-cancel {
+    @apply bg-gray-500 px-3 py-1 text-white rounded-md;
+  }
+
+  .btn-delete {
+    @apply bg-red-700 text-white px-3 py-1 rounded-md no-underline;
+  }
 }
