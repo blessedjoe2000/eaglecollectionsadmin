@@ -2,33 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  input,
-  textarea {
-    @apply border-2 border-gray-300 rounded-md w-full mb-2;
-  }
-
-  label {
-    @apply text-purple-600;
-  }
-
-  .required {
-    @apply text-red-600;
-  }
-
-  .btn-form {
-    @apply flex bg-purple-500 px-2 py-1 rounded-md  text-white;
-  }
-
-  a {
-    @apply no-underline;
-  }
-
-  .btn-cancel {
-    @apply bg-gray-500 px-3 py-1 text-white rounded-md;
-  }
-
-  .btn-delete {
-    @apply bg-red-700 text-white px-3 py-1 rounded-md no-underline;
-  }
+img {
+  max-height: 100%;
 }
+
+a {
+  text-decoration: none;
+}
+input,
+textarea {
+  @apply border-2 border-gray-300 rounded-md w-full mb-2;
+}
+
+input:focus,
+textarea:focus {
+  @apply border-purple-600;
+}
+
+label {
+  @apply text-purple-600;
+}
+
+.required {
+  @apply text-red-600;
+}
+
+.btn-form {
+  @apply flex bg-purple-500 px-2 py-1 rounded-md  text-white;
+}
+
+.btn-cancel {
+  @apply bg-gray-500 px-3 py-1 text-white rounded-md;
+}
+
+.btn-delete {
+  @apply bg-red-700 text-white px-3 py-1 rounded-md no-underline;
+}
+
+/* @layer base {
+} */
