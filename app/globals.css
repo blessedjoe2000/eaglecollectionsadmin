@@ -9,6 +9,10 @@ img {
 a {
   text-decoration: none;
 }
+
+h1 {
+  @apply text-purple-600 mb-2;
+}
 input,
 textarea {
   @apply border-2 border-gray-300 rounded-md w-full mb-2;
