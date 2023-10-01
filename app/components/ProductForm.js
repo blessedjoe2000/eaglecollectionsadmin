@@ -10,9 +10,6 @@ export default function ProductForm({
   description: existingDescription,
   price: existingPrice,
 }) {
-  // const CLOUD_NAME = "dpn75vlns";
-  // const UPLOAD_PRESET = "eaglecollections";
-
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setDescription] = useState(existingDescription || "");
   const [price, setPrice] = useState(existingPrice || "");
@@ -21,7 +18,7 @@ export default function ProductForm({
   const router = useRouter();
 
   const uploadImages = async (e) => {
-    const files = e.target?.files;
+    const files = e?.target?.files;
 
     if (!files) return;
 
@@ -34,30 +31,11 @@ export default function ProductForm({
 
       const response = await axios.post(`/api/upload`, formData);
 
-      console.log("response", response);
+      console.log("response", response.data);
+      setImages((oldImages) => {
+        return [...oldImages, ...response.data.links];
+      });
     }
-
-    // Object.keys(files)?.forEach((file) => {
-    //   formData.append("file", images);
-    //   formData.append("upload_preset", UPLOAD_PRESET);
-    // });
-
-    // try {
-    //   console.log("formData", formData);
-    //   const response = await fetch(
-    //     `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-    //     { method: "POST", body: formData }
-    //   );
-
-    //   const data = await response.json();
-
-    //   console.log("data", data);
-    //   const photoUrl = data["secure_url"];
-
-    //   return photoUrl;
-    // } catch (error) {
-    //   console.log(error);
-    // }
   };
 
   const handleSubmit = async (e) => {
@@ -115,8 +93,14 @@ export default function ProductForm({
           onChange={(e) => setDescription(e.target.value)}
         ></textarea>
       </div>
-      <label>Photos </label>
       <div>
+        <label>Photos </label>
+        {!!images?.length &&
+          images.map((link) => (
+            <div key={link}>
+              <img src={link} alt="product item" />
+            </div>
+          ))}
         <label
           htmlFor="images"
           className="w-24 h-24 cursor-pointer bg-gray-200 rounded-lg text-gray-900 p-2 flex flex-col justify-center items-center text-sm"
