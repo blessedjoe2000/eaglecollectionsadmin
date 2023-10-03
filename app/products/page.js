@@ -4,7 +4,6 @@ import Link from "next/link";
 import Layout from "../components/Layout";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.css";
 
 export default function Products() {
   const [allProducts, setAllProducts] = useState([]);
@@ -28,11 +27,11 @@ export default function Products() {
         Add new product
       </Link>
 
-      <table className="table table-striped mt-5">
+      <table className="">
         <thead>
           <tr>
-            <th scope="col">Product Title</th>
-            <th scope="col">Action</th>
+            <td>Product Title</td>
+            <td>Action</td>
           </tr>
         </thead>
         <tbody>
@@ -40,10 +39,10 @@ export default function Products() {
             allProducts.map((product) => {
               return (
                 <tr key={product._id}>
-                  <td scope="row">{product.title}</td>
+                  <td>{product.title}</td>
                   <td className="">
                     <Link
-                      className="bg-purple-500 text-white px-3 py-1 mx-2 rounded-md no-underline"
+                      className="btn-edit"
                       href={"/products/edit/" + product._id}
                     >
                       Edit

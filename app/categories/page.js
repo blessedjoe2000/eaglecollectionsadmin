@@ -1,24 +1,62 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import axios from "axios";
 
-export default function page() {
+export default function Categories() {
   const [name, setName] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [parentCategory, setParentCategory] = useState(null);
+  const [editedCategory, setEditedCategory] = useState(null);
+  const [deleteCategory, setDeleteCategory] = useState(null);
 
-  const saveName = async (e) => {
+  const getCategories = async () => {
+    const response = await axios.get("/api/categories");
+    setCategories(response.data);
+    return response.data;
+  };
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  const handleSaveCategory = async (e) => {
     e.preventDefault();
-    console.log("here");
 
-    await axios.post("/api/categories", { name });
+    const categoryData = { name, parentCategory };
+
+    if (editedCategory) {
+      await axios.patch("/api/categories", {
+        ...categoryData,
+        _id: editedCategory._id,
+      });
+      setEditedCategory(null);
+    } else {
+      await axios.post("/api/categories", categoryData);
+    }
+
     setName("");
+    getCategories();
+    setParentCategory("Select parent category");
+  };
+
+  const handleEditCategory = async (category) => {
+    setEditedCategory(category);
+    setName(category.name);
+    setParentCategory(category.parent?._id);
+  };
+
+  const handleDeleteCategory = async (id) => {
+    await axios.delete("/api/categories", id);
   };
   return (
     <Layout>
       <h1>Categories</h1>
-      <form onSubmit={saveName}>
+      <form onSubmit={handleSaveCategory}>
         <label>
-          New category name<span className="required">*</span>
+          {editedCategory
+            ? `Edit category ${editedCategory.name}  `
+            : "Create category"}
         </label>
         <div className="flex gap-1">
           <input
@@ -28,11 +66,54 @@ export default function page() {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
+          <select
+            className="mb-0"
+            onChange={(e) => setParentCategory(e?.target?.value)}
+            value={parentCategory}
+          >
+            <option value="">Select parent category</option>
+            {categories &&
+              categories.map((category) => (
+                <option value={category._id}>{category.name}</option>
+              ))}
+          </select>
           <button type="submit" className=" btn-form">
             Save
           </button>
         </div>
       </form>
+      <table className="">
+        <thead>
+          <tr>
+            <td>Categories</td>
+            <td>Parent Category</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          {categories &&
+            categories.map((category) => (
+              <tr>
+                <td>{category?.name}</td>
+                <td>{category?.parent?.name}</td>
+                <td>
+                  <button
+                    onClick={() => handleEditCategory(category)}
+                    className="btn-edit"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteCategory(category._id)}
+                    className="btn-delete"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
     </Layout>
   );
 }

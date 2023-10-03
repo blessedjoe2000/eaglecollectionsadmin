@@ -26,7 +26,7 @@ export async function PATCH(req, ctx) {
 
     if (!product) {
       return new Response(JSON.stringify({ message: "product not found" }), {
-        status: 403,
+        status: 404,
       });
     }
 
@@ -53,7 +53,7 @@ export async function DELETE(req, ctx) {
 
     if (!product) {
       return new Response(JSON.stringify({ message: "product not found" }), {
-        status: 403,
+        status: 404,
       });
     }
 

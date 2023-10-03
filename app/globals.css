@@ -9,17 +9,30 @@ img {
 a {
   text-decoration: none;
 }
+table {
+  @apply w-full my-5;
+}
+
+table thead tr td {
+  @apply bg-purple-200 font-bold;
+}
+
+table tr td {
+  @apply border-2 border-gray-200 p-1;
+}
 
 h1 {
   @apply text-purple-600 mb-2;
 }
 input,
-textarea {
+textarea,
+select {
   @apply border-2 border-gray-300 rounded-md w-full mb-2;
 }
 
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
   @apply border-purple-600;
 }
 
@@ -32,7 +45,7 @@ label {
 }
 
 .btn-form {
-  @apply flex bg-purple-500 px-2 py-1 rounded-md  text-white;
+  @apply flex bg-purple-400 px-2 py-1 rounded-md  text-white;
 }
 
 .btn-cancel {
@@ -40,7 +53,11 @@ label {
 }
 
 .btn-delete {
-  @apply bg-red-700 text-white px-3 py-1 rounded-md no-underline;
+  @apply bg-red-600 text-white px-3 py-1 rounded-md no-underline;
+}
+
+.btn-edit {
+  @apply bg-purple-400 text-white px-3 py-1 mx-2 rounded-md;
 }
 
 /* @layer base {
