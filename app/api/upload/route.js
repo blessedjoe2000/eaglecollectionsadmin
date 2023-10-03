@@ -1,8 +1,10 @@
-import { extname, join } from "path";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import path, { extname, join } from "path";
 import * as dateFn from "date-fns";
 import { NextResponse } from "next/server";
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import mime from "mime-types";
+import fs from "fs";
+import { stat, mkdir, writeFile } from "fs/promises";
 
 function sanitizeFilename(filename) {
   return filename.replace(/[^a-zA-Z0-9_\u0600-\u06FF.]/g, "_");
@@ -19,7 +21,28 @@ export async function POST(request) {
     );
   }
 
+  const buffer = Buffer.from(await file.arrayBuffer());
+
+  const pathDist = join(process.cwd(), "/public/images");
   const relativeUploadDir = `${dateFn.format(Date.now(), "dd-MM-Y")}`;
+  const uploadDir = join(pathDist, relativeUploadDir);
+
+  try {
+    await stat(uploadDir);
+  } catch (e) {
+    if (e.code === "ENOENT") {
+      await mkdir(uploadDir, { recursive: true });
+    } else {
+      console.error(
+        "Error while trying to create directory when uploading a file\n",
+        e
+      );
+      return NextResponse.json(
+        { error: "Something went wrong." },
+        { status: 500 }
+      );
+    }
+  }
 
   try {
     const uniqueSuffix = `${Date.now()}_${Math.round(Math.random() * 1e9)}`;
@@ -27,9 +50,9 @@ export async function POST(request) {
     const originalFilename = file.name.replace(/\.[^/.]+$/, "");
     const sanitizedFilename = sanitizeFilename(originalFilename);
     const filename = `${sanitizedFilename}_${uniqueSuffix}${fileExtension}`;
+    await writeFile(`${uploadDir}/${filename}`, buffer);
 
-    const finalFilePath =
-      "/public/images/" + `${relativeUploadDir}/${filename}`;
+    const finalFilePath = `${uploadDir}/${filename}`;
 
     const client = new S3Client({
       region: "us-west-1",
@@ -47,6 +70,7 @@ export async function POST(request) {
         Bucket: bucketName,
         Key: filename,
         ACL: "public-read",
+        Body: fs.readFileSync(finalFilePath),
         ContentType: mime.lookup(finalFilePath),
       })
     );
