@@ -31,35 +31,6 @@ export async function GET(req) {
   }
 }
 
-// export async function PATCH(req, ctx) {
-//   await mongooseConnect();
-
-//   const { id } = ctx.params;
-//   try {
-//     const categoryData = await req.json();
-
-//     const category = await Category.findById(id);
-
-//     if (!category) {
-//       return new Response(JSON.stringify({ message: "category not found" }), {
-//         status: 404,
-//       });
-//     }
-
-//     const updatedCategory = await Category.findByIdAndUpdate(
-//       id,
-//       {
-//         $set: { ...categoryData },
-//       },
-//       { new: true }
-//     );
-
-//     return new Response(JSON.stringify(updatedCategory), { status: 200 });
-//   } catch (error) {
-//     return new Response(JSON.stringify(error.message), { status: 500 });
-//   }
-// }
-
 export async function PATCH(req) {
   //connected to database
   await mongooseConnect();
@@ -76,24 +47,6 @@ export async function PATCH(req) {
     );
 
     return new Response(JSON.stringify(category), { status: 201 });
-  } catch (error) {
-    return new Response(JSON.stringify(error.message), { status: 500 });
-  }
-}
-
-export async function DELETE(req) {
-  await mongooseConnect();
-
-  try {
-    const { _id } = await req.json();
-    console.log("_id", _id);
-
-    await Category.deleteOne(_id);
-
-    return new Response(
-      JSON.stringify({ message: `category id ${id} deleted successfully` }),
-      { status: 200 }
-    );
   } catch (error) {
     return new Response(JSON.stringify(error.message), { status: 500 });
   }

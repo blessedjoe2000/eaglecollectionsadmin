@@ -2,13 +2,14 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import axios from "axios";
+import { withSwal } from "react-sweetalert2";
 
-export default function Categories() {
+function Categories({ swal }) {
   const [name, setName] = useState([]);
   const [categories, setCategories] = useState([]);
   const [parentCategory, setParentCategory] = useState(null);
   const [editedCategory, setEditedCategory] = useState(null);
-  const [deleteCategory, setDeleteCategory] = useState(null);
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const getCategories = async () => {
     const response = await axios.get("/api/categories");
@@ -46,8 +47,27 @@ export default function Categories() {
     setParentCategory(category.parent?._id);
   };
 
-  const handleDeleteCategory = async (id) => {
-    await axios.delete("/api/categories", id);
+  const handleDeleteCategory = (category) => {
+    swal
+      .fire({
+        title: "Confirm Delete",
+        text: `Are you sure you want to delete ${category.name} category?`,
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        confirmButtonText: "Delete",
+        confirmButtonColor: "#DC2625",
+        reverseButtons: true,
+      })
+      .then(async (result) => {
+        const { _id } = category;
+        if (result.isConfirmed) {
+          await axios.delete(`/api/categories/${_id}`);
+          getCategories();
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
   return (
     <Layout>
@@ -104,7 +124,7 @@ export default function Categories() {
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDeleteCategory(category._id)}
+                    onClick={() => handleDeleteCategory(category)}
                     className="btn-delete"
                   >
                     Delete
@@ -117,3 +137,5 @@ export default function Categories() {
     </Layout>
   );
 }
+
+export default withSwal(({ swal }, ref) => <Categories swal={swal} />);
