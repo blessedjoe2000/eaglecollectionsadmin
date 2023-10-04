@@ -7,10 +7,11 @@ import { withSwal } from "react-sweetalert2";
 function Categories({ swal }) {
   const [name, setName] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [parentCategory, setParentCategory] = useState(null);
-  const [editedCategory, setEditedCategory] = useState(null);
+  const [parentCategory, setParentCategory] = useState("");
+  const [editedCategory, setEditedCategory] = useState("");
   const [properties, setProperties] = useState([]);
-  const [newName, setNewName] = useState("");
+  // const [propName, setPropName] = useState("");
+  // const [propValue, setPropValue] = useState("");
 
   const getCategories = async () => {
     const response = await axios.get("/api/categories");
@@ -77,11 +78,20 @@ function Categories({ swal }) {
     });
   };
 
-  const handlePropertyNameChange = (index, property, newName) => {
-    console.log("click");
-    // console.log("index", index);
-    // console.log("property", property);
-    // console.log("newName", newName);
+  const handlePropertyNameChange = (index, newName) => {
+    setProperties((prev) => {
+      const properties = [...prev];
+      properties[index].name = newName;
+      return properties;
+    });
+  };
+
+  const handlePropertyValuesChange = (index, newValues) => {
+    setProperties((prev) => {
+      const properties = [...prev];
+      properties[index].values = newValues;
+      return properties;
+    });
   };
 
   return (
@@ -122,24 +132,23 @@ function Categories({ swal }) {
           </button>
           {properties &&
             properties.map((property, index) => (
-              <div>
+              <div key={index}>
+                {console.log("property ", property)}
                 <div className="flex gap-1">
                   <input
                     type="text"
                     placeholder="Enter property name (example: color)"
                     value={property.name}
-                    onChange={(e) => console.log(e.target.value)}
+                    onChange={(e) =>
+                      handlePropertyNameChange(index, e.target.value)
+                    }
                   />
                   <input
                     type="text"
                     placeholder="Property values, (comma seperated)"
                     value={property.values}
                     onChange={(e) =>
-                      handlePropertyNameChange(
-                        index,
-                        property,
-                        e?.target?.value
-                      )
+                      handlePropertyValuesChange(index, e.target.value)
                     }
                   />
                 </div>
@@ -161,7 +170,7 @@ function Categories({ swal }) {
         <tbody>
           {categories &&
             categories.map((category) => (
-              <tr>
+              <tr key={category._id}>
                 <td>{category?.name}</td>
                 <td>{category?.parent?.name}</td>
                 <td>
