@@ -9,7 +9,8 @@ function Categories({ swal }) {
   const [categories, setCategories] = useState([]);
   const [parentCategory, setParentCategory] = useState(null);
   const [editedCategory, setEditedCategory] = useState(null);
-  const [deleteModal, setDeleteModal] = useState(false);
+  const [properties, setProperties] = useState([]);
+  const [newName, setNewName] = useState("");
 
   const getCategories = async () => {
     const response = await axios.get("/api/categories");
@@ -69,6 +70,20 @@ function Categories({ swal }) {
         console.log(e);
       });
   };
+
+  const handleProperty = () => {
+    setProperties((prev) => {
+      return [...prev, { name: "", values: "" }];
+    });
+  };
+
+  const handlePropertyNameChange = (index, property, newName) => {
+    console.log("click");
+    // console.log("index", index);
+    // console.log("property", property);
+    // console.log("newName", newName);
+  };
+
   return (
     <Layout>
       <h1>Categories</h1>
@@ -78,29 +93,62 @@ function Categories({ swal }) {
             ? `Edit category ${editedCategory.name}  `
             : "Create category"}
         </label>
-        <div className="flex gap-1">
-          <input
-            className="mb-0"
-            type="text"
-            placeholder="Enter new category name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <select
-            className="mb-0"
-            onChange={(e) => setParentCategory(e?.target?.value)}
-            value={parentCategory}
-          >
-            <option value="">Select parent category</option>
-            {categories &&
-              categories.map((category) => (
-                <option value={category._id}>{category.name}</option>
-              ))}
-          </select>
-          <button type="submit" className=" btn-form">
-            Save
-          </button>
+        <div className="">
+          <div className="flex gap-1">
+            <input
+              type="text"
+              placeholder="Enter new category name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <select
+              onChange={(e) => setParentCategory(e?.target?.value)}
+              value={parentCategory}
+            >
+              <option value="">Select parent category</option>
+              {categories &&
+                categories.map((category) => (
+                  <option value={category._id} key={category._id}>
+                    {category.name}
+                  </option>
+                ))}
+            </select>
+          </div>
         </div>
+        <div>
+          <label className="block">Properties</label>
+          <button className="btn-form" type="button" onClick={handleProperty}>
+            Add new property
+          </button>
+          {properties &&
+            properties.map((property, index) => (
+              <div>
+                <div className="flex gap-1">
+                  <input
+                    type="text"
+                    placeholder="Enter property name (example: color)"
+                    value={property.name}
+                    onChange={(e) => console.log(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Property values, (comma seperated)"
+                    value={property.values}
+                    onChange={(e) =>
+                      handlePropertyNameChange(
+                        index,
+                        property,
+                        e?.target?.value
+                      )
+                    }
+                  />
+                </div>
+              </div>
+            ))}
+        </div>
+        <button type="submit" className=" btn-save">
+          Save
+        </button>
       </form>
       <table className="">
         <thead>

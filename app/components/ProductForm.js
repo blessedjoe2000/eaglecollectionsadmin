@@ -1,7 +1,7 @@
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Spinner from "./Spinner";
 import { ReactSortable } from "react-sortablejs";
 
@@ -11,12 +11,15 @@ export default function ProductForm({
   images: existingImages,
   description: existingDescription,
   price: existingPrice,
+  category: existingCategory,
 }) {
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setDescription] = useState(existingDescription || "");
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImages || []);
+  const [category, setCategory] = useState(existingCategory || "");
   const [isUploading, setIsUploading] = useState(false);
+  const [categories, setCategories] = useState([]);
 
   const router = useRouter();
 
@@ -45,7 +48,7 @@ export default function ProductForm({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const productData = { title, description, price, images };
+    const productData = { title, description, price, images, category };
 
     if (!title || !price) {
       console.log("title and price is required");
@@ -70,6 +73,16 @@ export default function ProductForm({
     setImages(images);
   };
 
+  const getAllCategories = async () => {
+    const response = await axios.get("/api/categories");
+    setCategories(response.data);
+    return response.data;
+  };
+
+  useEffect(() => {
+    getAllCategories();
+  }, []);
+
   return (
     <form onSubmit={handleSubmit}>
       <div>
@@ -85,19 +98,25 @@ export default function ProductForm({
           onChange={(e) => setTitle(e.target.value)}
         />
       </div>
+
       <div>
-        <label htmlFor="description">Description</label>
-        <textarea
-          name="description"
-          id="description"
-          cols="10"
-          rows="5"
-          placeholder="Enter description..."
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        ></textarea>
+        <label htmlFor="category">Category</label>
+        <select
+          className="mb-0"
+          value={category}
+          onChange={(e) => setCategory(e?.target?.value)}
+        >
+          <option value="">Uncategorised</option>
+          {categories &&
+            categories.map((category) => (
+              <option value={category?._id} key={category._id}>
+                {category?.name}
+              </option>
+            ))}
+        </select>
       </div>
-      <label>Photos </label>
+
+      <label className="mt-4">Photos </label>
       <div className="flex flex-wrap gap-1 mb-2">
         <ReactSortable
           className="flex flex-wrap gap-1"
@@ -147,6 +166,19 @@ export default function ProductForm({
       </div>
 
       <div>
+        <label htmlFor="description">Description</label>
+        <textarea
+          name="description"
+          id="description"
+          cols="5"
+          rows="3"
+          placeholder="Enter description..."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        ></textarea>
+      </div>
+
+      <div>
         <label htmlFor="price">
           Price (in USD)<span className="required">*</span>
         </label>
@@ -162,7 +194,11 @@ export default function ProductForm({
       </div>
 
       <div className="flex gap-2">
-        <button type="submit" className=" btn-form">
+        <button
+          type="submit"
+          className=" btn-save
+        "
+        >
           Save
         </button>
         <Link href={"/products"} className="btn-cancel">
