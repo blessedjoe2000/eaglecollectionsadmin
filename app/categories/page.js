@@ -10,8 +10,7 @@ function Categories({ swal }) {
   const [parentCategory, setParentCategory] = useState("");
   const [editedCategory, setEditedCategory] = useState("");
   const [properties, setProperties] = useState([]);
-  // const [propName, setPropName] = useState("");
-  // const [propValue, setPropValue] = useState("");
+  const [closeProperty, setCloseProperty] = useState(false);
 
   const getCategories = async () => {
     const response = await axios.get("/api/categories");
@@ -94,6 +93,17 @@ function Categories({ swal }) {
     });
   };
 
+  const handleCloseProperty = (index) => {
+    console.log("click", index);
+    setProperties((prev) => {
+      const properties = [...prev];
+
+      return properties.filter(
+        (property, innerIndex) => property[innerIndex] !== property[index]
+      );
+    });
+  };
+
   return (
     <Layout>
       <h1>Categories</h1>
@@ -134,8 +144,9 @@ function Categories({ swal }) {
             properties.map((property, index) => (
               <div key={index}>
                 {console.log("property ", property)}
-                <div className="flex gap-1">
+                <div className="flex gap-1 mb-2">
                   <input
+                    className="mb-0"
                     type="text"
                     placeholder="Enter property name (example: color)"
                     value={property.name}
@@ -144,6 +155,7 @@ function Categories({ swal }) {
                     }
                   />
                   <input
+                    className="mb-0"
                     type="text"
                     placeholder="Property values, (comma seperated)"
                     value={property.values}
@@ -151,6 +163,13 @@ function Categories({ swal }) {
                       handlePropertyValuesChange(index, e.target.value)
                     }
                   />
+                  <button
+                    onClick={() => handleCloseProperty(index)}
+                    type="button"
+                    className="btn-cancel text-sm mb-0"
+                  >
+                    close
+                  </button>
                 </div>
               </div>
             ))}
