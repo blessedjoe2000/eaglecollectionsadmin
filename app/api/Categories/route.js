@@ -6,11 +6,14 @@ export async function POST(req) {
   await mongooseConnect();
 
   try {
-    const { name, parentCategory } = await req.json();
+    const { name, parentCategory, properties } = await req.json();
 
-    const category = await Category.create({
+    let category;
+
+    category = await Category.create({
       name,
-      parent: parentCategory,
+      parent: parentCategory || undefined,
+      properties,
     });
 
     return new Response(JSON.stringify(category), { status: 201 });
@@ -36,13 +39,14 @@ export async function PATCH(req) {
   await mongooseConnect();
 
   try {
-    const { name, parentCategory, _id } = await req.json();
+    const { name, parentCategory, properties, _id } = await req.json();
 
     const category = await Category.updateOne(
       { _id },
       {
         name,
         parent: parentCategory,
+        properties,
       }
     );
 

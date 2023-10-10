@@ -10,7 +10,6 @@ function Categories({ swal }) {
   const [parentCategory, setParentCategory] = useState("");
   const [editedCategory, setEditedCategory] = useState("");
   const [properties, setProperties] = useState([]);
-  const [closeProperty, setCloseProperty] = useState(false);
 
   const getCategories = async () => {
     const response = await axios.get("/api/categories");
@@ -25,7 +24,14 @@ function Categories({ swal }) {
   const handleSaveCategory = async (e) => {
     e.preventDefault();
 
-    const categoryData = { name, parentCategory };
+    const categoryData = {
+      name,
+      parentCategory,
+      properties: properties?.map((p) => ({
+        name: p.name,
+        values: p.values.split(","),
+      })),
+    };
 
     if (editedCategory) {
       await axios.patch("/api/categories", {
@@ -39,7 +45,8 @@ function Categories({ swal }) {
 
     setName("");
     getCategories();
-    setParentCategory("Select parent category");
+    setParentCategory("");
+    setProperties("");
   };
 
   const handleEditCategory = async (category) => {
@@ -94,14 +101,15 @@ function Categories({ swal }) {
   };
 
   const handleCloseProperty = (index) => {
-    console.log("click", index);
     setProperties((prev) => {
-      const properties = [...prev];
-
-      return properties.filter(
-        (property, innerIndex) => property[innerIndex] !== property[index]
-      );
+      return [...prev].filter((property, innerIndex) => innerIndex !== index);
     });
+  };
+
+  const cancleEditedCategory = () => {
+    setEditedCategory(null);
+    setName("");
+    setParentCategory("");
   };
 
   return (
@@ -136,14 +144,45 @@ function Categories({ swal }) {
           </div>
         </div>
         <div>
-          <label className="block">Properties</label>
-          <button className="btn-form" type="button" onClick={handleProperty}>
-            Add new property
-          </button>
+          {" "}
+          {editedCategory ? (
+            <div>
+              <label className="block"> Edit Properties</label>
+              {properties &&
+                properties.map((p) => {
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Enter new property name"
+                      value={p.name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                    {p.values.map((value) => {
+                      <input
+                        type="text"
+                        placeholder="Enter new property name"
+                        value={value.values}
+                        onChange={(e) => setName(e.target.value)}
+                      />;
+                    })}
+                  </div>;
+                })}
+            </div>
+          ) : (
+            <div>
+              <label className="block">Properties</label>
+              <button
+                className="btn-form"
+                type="button"
+                onClick={handleProperty}
+              >
+                Add new property
+              </button>
+            </div>
+          )}
           {properties &&
             properties.map((property, index) => (
               <div key={index}>
-                {console.log("property ", property)}
                 <div className="flex gap-1 mb-2">
                   <input
                     className="mb-0"
@@ -174,42 +213,55 @@ function Categories({ swal }) {
               </div>
             ))}
         </div>
-        <button type="submit" className=" btn-save">
-          Save
-        </button>
+        <div className="flex gap-1 mt-5">
+          <button type="submit" className=" btn-save">
+            Save
+          </button>
+          {editedCategory && (
+            <button
+              onClick={cancleEditedCategory}
+              type="button"
+              className="btn-cancel"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </form>
-      <table className="">
-        <thead>
-          <tr>
-            <td>Categories</td>
-            <td>Parent Category</td>
-            <td></td>
-          </tr>
-        </thead>
-        <tbody>
-          {categories &&
-            categories.map((category) => (
-              <tr key={category._id}>
-                <td>{category?.name}</td>
-                <td>{category?.parent?.name}</td>
-                <td>
-                  <button
-                    onClick={() => handleEditCategory(category)}
-                    className="btn-edit"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteCategory(category)}
-                    className="btn-delete"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      {!editedCategory && (
+        <table className="">
+          <thead>
+            <tr>
+              <td>Categories</td>
+              <td>Parent Category</td>
+              <td></td>
+            </tr>
+          </thead>
+          <tbody>
+            {categories &&
+              categories.map((category) => (
+                <tr key={category._id}>
+                  <td>{category?.name}</td>
+                  <td>{category?.parent?.name}</td>
+                  <td>
+                    <button
+                      onClick={() => handleEditCategory(category)}
+                      className="btn-edit"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteCategory(category)}
+                      className="btn-delete"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      )}
     </Layout>
   );
 }
