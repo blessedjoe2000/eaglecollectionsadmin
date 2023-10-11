@@ -45,7 +45,7 @@ export async function PATCH(req) {
       { _id },
       {
         name,
-        parent: parentCategory,
+        parent: parentCategory || undefined,
         properties,
       }
     );

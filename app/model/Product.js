@@ -9,6 +9,7 @@ const productSchema = new mongoose.Schema(
     price: { type: Number, required: { true: "Enter product price" } },
     images: [{ type: String }],
     category: { type: mongoose.Types.ObjectId, ref: "Category" },
+    properties: { type: Object },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

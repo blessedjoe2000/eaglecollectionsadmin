@@ -29,7 +29,7 @@ function Categories({ swal }) {
       parentCategory,
       properties: properties?.map((p) => ({
         name: p.name,
-        values: p.values.split(","),
+        values: p.values.trim().split(","),
       })),
     };
 
@@ -53,6 +53,7 @@ function Categories({ swal }) {
     setEditedCategory(category);
     setName(category.name);
     setParentCategory(category.parent?._id);
+    setProperties(category.properties);
   };
 
   const handleDeleteCategory = (category) => {
@@ -110,6 +111,7 @@ function Categories({ swal }) {
     setEditedCategory(null);
     setName("");
     setParentCategory("");
+    setProperties("");
   };
 
   return (
@@ -146,40 +148,15 @@ function Categories({ swal }) {
         <div>
           {" "}
           {editedCategory ? (
-            <div>
-              <label className="block"> Edit Properties</label>
-              {properties &&
-                properties.map((p) => {
-                  <div>
-                    <input
-                      type="text"
-                      placeholder="Enter new property name"
-                      value={p.name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                    {p.values.map((value) => {
-                      <input
-                        type="text"
-                        placeholder="Enter new property name"
-                        value={value.values}
-                        onChange={(e) => setName(e.target.value)}
-                      />;
-                    })}
-                  </div>;
-                })}
-            </div>
+            <label className="block"> Edit Properties</label>
           ) : (
-            <div>
-              <label className="block">Properties</label>
-              <button
-                className="btn-form"
-                type="button"
-                onClick={handleProperty}
-              >
-                Add new property
-              </button>
-            </div>
+            <label className="block">Properties</label>
           )}
+          <div>
+            <button className="btn-form" type="button" onClick={handleProperty}>
+              Add new property
+            </button>
+          </div>
           {properties &&
             properties.map((property, index) => (
               <div key={index}>

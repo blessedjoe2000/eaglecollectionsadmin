@@ -12,12 +12,16 @@ export default function ProductForm({
   description: existingDescription,
   price: existingPrice,
   category: existingCategory,
+  properties: existingProperties,
 }) {
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setDescription] = useState(existingDescription || "");
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImages || []);
   const [category, setCategory] = useState(existingCategory || "");
+  const [productProperties, setProductProperties] = useState(
+    existingProperties || {}
+  );
   const [isUploading, setIsUploading] = useState(false);
   const [categories, setCategories] = useState([]);
 
@@ -48,7 +52,14 @@ export default function ProductForm({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const productData = { title, description, price, images, category };
+    const productData = {
+      title,
+      description,
+      price,
+      images,
+      category,
+      properties: productProperties,
+    };
 
     if (!title || !price) {
       console.log("title and price is required");
@@ -83,6 +94,27 @@ export default function ProductForm({
     getAllCategories();
   }, []);
 
+  const propertiesToFill = [];
+  if (categories.length > 0 && category) {
+    let CatInfo = categories.find(({ _id }) => _id === category);
+    propertiesToFill.push(...CatInfo.properties);
+    while (CatInfo?.parent?._id) {
+      const parentCat = categories.find(
+        ({ _id }) => _id === CatInfo?.parent?._id
+      );
+      propertiesToFill.push(...parentCat.properties);
+      CatInfo = parentCat;
+    }
+  }
+
+  const handleProductProps = (propName, value) => {
+    setProductProperties((prev) => {
+      const newProductProps = { ...prev };
+      newProductProps[propName] = value;
+      return newProductProps;
+    });
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <div>
@@ -102,7 +134,7 @@ export default function ProductForm({
       <div>
         <label htmlFor="category">Category</label>
         <select
-          className="mb-0"
+          className="mb-2"
           value={category}
           onChange={(e) => setCategory(e?.target?.value)}
         >
@@ -114,6 +146,24 @@ export default function ProductForm({
               </option>
             ))}
         </select>
+        {propertiesToFill &&
+          propertiesToFill.map((p, index) => (
+            <div key={index} className="flex gap-1 ">
+              <label>{p.name}:</label>
+
+              <select
+                className=""
+                value={productProperties[p.name]}
+                onChange={(e) => handleProductProps(p.name, e?.target.value)}
+              >
+                {p.values.map((v, index) => (
+                  <option key={index} value={v}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
       </div>
 
       <label className="mt-4">Photos </label>

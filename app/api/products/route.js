@@ -6,7 +6,8 @@ export async function POST(req) {
   await mongooseConnect();
 
   try {
-    const { title, description, price, images, category } = await req.json();
+    const { title, description, price, images, category, properties } =
+      await req.json();
 
     const productData = await Product.create({
       title,
@@ -14,6 +15,7 @@ export async function POST(req) {
       price,
       images,
       category,
+      properties,
     });
 
     return new Response(JSON.stringify(productData), { status: 201 });
