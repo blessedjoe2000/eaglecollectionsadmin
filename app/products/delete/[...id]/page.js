@@ -36,7 +36,7 @@ export default function DeleteProduct() {
         <div>
           <div>Title: {product.title}</div>
           <div>Description: {product.description}</div>
-          <div>price: {product.price}</div>
+          <div>price: ${product.price}</div>
         </div>
       )}
 
