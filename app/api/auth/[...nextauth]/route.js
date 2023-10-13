@@ -1,6 +1,6 @@
 import clientPromise from "@/app/lib/mongodb";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import NextAuth from "next-auth";
+import NextAuth, { getServerSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import User from "@/app/model/User";
@@ -8,6 +8,8 @@ import bcrypt from "bcrypt";
 import { signJwtToken } from "@/app/lib/jwt";
 import { mongooseConnect } from "@/app/lib/connectDb";
 // import db from "@/app/lib/mongodb";
+
+const adminEmails = ["blessedjoe2000@gmail.com"];
 
 export const authOptions = {
   providers: [
@@ -63,16 +65,19 @@ export const authOptions = {
       }
       return token;
     },
-    async session({ session, token }) {
-      if (token) {
-        session.user = {
-          _id: token._id,
-          accessToken: token.accessToken,
-          email: token.email,
-        };
+    async session({ session, token, user }) {
+      if (adminEmails.includes(session?.user?.email)) {
+        if (token) {
+          session.user = {
+            _id: token._id,
+            accessToken: token.accessToken,
+            email: token.email,
+          };
+        }
+        return session;
+      } else {
+        return false;
       }
-
-      return session;
     },
   },
 
@@ -82,3 +87,10 @@ export const authOptions = {
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
+
+export async function isAdminRequest() {
+  const session = await getServerSession(authOptions);
+  if (!adminEmails.includes(session?.user?.email)) {
+    throw new Error("Not authorized, you're not an admin");
+  }
+}

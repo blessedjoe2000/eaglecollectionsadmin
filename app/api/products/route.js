@@ -1,9 +1,11 @@
 import { mongooseConnect } from "@/app/lib/connectDb";
 import Product from "@/app/model/Product";
+import { isAdminRequest } from "../auth/[...nextauth]/route";
 
 export async function POST(req) {
   //connected to database
   await mongooseConnect();
+  await isAdminRequest();
 
   try {
     const { title, description, price, images, category, properties } =
@@ -26,6 +28,7 @@ export async function POST(req) {
 
 export async function GET(req) {
   await mongooseConnect();
+  await isAdminRequest();
 
   try {
     const allProducts = await Product.find();

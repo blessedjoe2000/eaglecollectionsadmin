@@ -1,9 +1,11 @@
 import { mongooseConnect } from "@/app/lib/connectDb";
 import Category from "@/app/model/Category";
+import { isAdminRequest } from "../auth/[...nextauth]/route";
 
 export async function POST(req) {
   //connected to database
   await mongooseConnect();
+  await isAdminRequest();
 
   try {
     const { name, parentCategory, properties } = await req.json();
@@ -24,6 +26,7 @@ export async function POST(req) {
 
 export async function GET(req) {
   await mongooseConnect();
+  await isAdminRequest();
 
   try {
     const categories = await Category.find().populate("parent");
@@ -37,6 +40,7 @@ export async function GET(req) {
 export async function PATCH(req) {
   //connected to database
   await mongooseConnect();
+  await isAdminRequest();
 
   try {
     const { name, parentCategory, properties, _id } = await req.json();
