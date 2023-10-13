@@ -119,7 +119,7 @@ export default function ProductForm({
     <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="title">
-          Title<span className="required">*</span>
+          Product name<span className="required">*</span>
         </label>
         <input
           type="text"
@@ -148,8 +148,8 @@ export default function ProductForm({
         </select>
         {propertiesToFill &&
           propertiesToFill.map((p, index) => (
-            <div key={index} className="flex gap-1 ">
-              <label>{p.name}:</label>
+            <div key={index} className=" ">
+              <label>{p.name[0].toUpperCase() + p.name.substring(1)}</label>
 
               <select
                 className=""
@@ -167,7 +167,7 @@ export default function ProductForm({
       </div>
 
       <label className="mt-4">Photos </label>
-      <div className="flex flex-wrap gap-1 mb-2">
+      <div className="flex flex-wrap gap-2 mb-2">
         <ReactSortable
           className="flex flex-wrap gap-1"
           list={images}
@@ -187,7 +187,7 @@ export default function ProductForm({
         )}
         <label
           htmlFor="images"
-          className=" w-24 h-24 cursor-pointer bg-gray-200 rounded-lg text-gray-900 p-2 flex flex-col justify-center items-center text-sm"
+          className=" w-22 h-24 cursor-pointer bg-gray-200 rounded-lg text-purple-600 p-2 flex flex-col justify-center items-center text-sm shadow-sm"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -203,7 +203,7 @@ export default function ProductForm({
               d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
             />
           </svg>
-          Upload
+          Add image
         </label>
 
         <input
@@ -243,7 +243,7 @@ export default function ProductForm({
         />
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 mt-2">
         <button
           type="submit"
           className=" btn-save

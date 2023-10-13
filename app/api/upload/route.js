@@ -5,12 +5,17 @@ import { NextResponse } from "next/server";
 import mime from "mime-types";
 import fs from "fs";
 import { stat, mkdir, writeFile } from "fs/promises";
+import { mongooseConnect } from "@/app/lib/connectDb";
+import { isAdminRequest } from "../auth/[...nextauth]/route";
 
 function sanitizeFilename(filename) {
   return filename.replace(/[^a-zA-Z0-9_\u0600-\u06FF.]/g, "_");
 }
 
 export async function POST(request) {
+  await mongooseConnect();
+  await isAdminRequest();
+
   const formData = await request.formData();
 
   const file = formData.get("file");

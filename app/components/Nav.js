@@ -1,24 +1,38 @@
+"use client";
+
 import Link from "next/link";
 import React from "react";
-import logo from "@/public/images/eaglecollectionlogo.png";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
-function Nav() {
+import { signOut } from "next-auth/react";
+import Logo from "./Logo";
+
+function Nav({ showMobile }) {
   const pathname = usePathname();
+
   const inactiveLink = "flex gap-2 text-white";
-  const activeLink = `flex gap-2 text-purple-600 + bg-white p-2 rounded-l-lg`;
+  const activeLink = `flex gap-2 text-purple-600 + bg-white p-2 rounded-md`;
+  const inactiveIcon = "w-6 h-6";
+  const activeIcon = `${inactiveIcon} "text-pink-500`;
+
+  async function logout() {
+    try {
+      await signOut({ callbackUrl: "/login" });
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  }
 
   return (
-    <aside className="text-white p-4 pr-0">
-      <Link href="/">
-        <Image
-          src={logo}
-          alt="eagle collections logo"
-          width="160"
-          className="mb-4 mr-4 p-4 bg-black"
-        />
-      </Link>
+    <aside
+      className={
+        (showMobile ? "left-0 " : "-left-full") +
+        `  top-0 text-white p-4 fixed w-full bg-purple-300 h-screen md:static md:w-auto transition-all`
+      }
+    >
       <nav className="flex flex-col gap-2">
+        <div className="mb-4">
+          <Logo />
+        </div>
         <Link href="/" className={pathname === "/" ? activeLink : inactiveLink}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +40,7 @@ function Nav() {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6 "
+            className={pathname === "/" ? activeIcon : inactiveIcon}
           >
             <path
               strokeLinecap="round"
@@ -34,7 +48,7 @@ function Nav() {
               d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
             />
           </svg>
-          Dashboard
+          <div>Dashboard</div>
         </Link>
         <Link
           href="/products"
@@ -46,7 +60,9 @@ function Nav() {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6"
+            className={
+              pathname.includes("/products") ? activeIcon : inactiveIcon
+            }
           >
             <path
               strokeLinecap="round"
@@ -68,7 +84,9 @@ function Nav() {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6"
+            className={
+              pathname.includes("/categories") ? activeIcon : inactiveIcon
+            }
           >
             <path
               strokeLinecap="round"
@@ -88,7 +106,7 @@ function Nav() {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6 "
+            className={pathname.includes("/orders") ? activeIcon : inactiveIcon}
           >
             <path
               strokeLinecap="round"
@@ -108,7 +126,9 @@ function Nav() {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6 "
+            className={
+              pathname.includes("/settings") ? activeIcon : inactiveIcon
+            }
           >
             <path
               strokeLinecap="round"
@@ -123,6 +143,31 @@ function Nav() {
           </svg>
           Settings
         </Link>
+
+        <div>
+          <button
+            className="bg-pink-500 py-2 px-2 rounded-lg mt-2"
+            onClick={logout}
+          >
+            <div className="flex gap-1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
+                />
+              </svg>
+              Logout
+            </div>
+          </button>
+        </div>
       </nav>
     </aside>
   );

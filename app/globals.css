@@ -14,20 +14,21 @@ table {
 }
 
 table thead tr td {
-  @apply bg-purple-200 font-bold;
+  @apply bg-purple-200 font-bold text-sm uppercase;
 }
 
 table tr td {
-  @apply border-2 border-gray-200 p-1;
+  @apply p-1;
 }
 
 h1 {
-  @apply text-purple-600 mb-2;
+  @apply text-purple-600 mb-2 text-xl;
 }
 input,
 textarea,
 select {
-  @apply border-2 border-gray-300 rounded-md w-full mb-2;
+  @apply border border-gray-200 rounded-sm w-full mb-2 p-1;
+  @apply shadow-md;
 }
 
 input:focus,
@@ -37,7 +38,7 @@ select:focus {
 }
 
 label {
-  @apply text-purple-600;
+  @apply text-purple-600 text-sm;
 }
 
 .required {
@@ -53,11 +54,11 @@ label {
 }
 
 .btn-delete {
-  @apply bg-red-600 text-white px-3 py-1 rounded-md no-underline;
+  @apply bg-red-600 text-white px-3 py-1 rounded-sm inline-flex items-center text-sm shadow-sm;
 }
 
 .btn-edit {
-  @apply bg-purple-400 text-white px-3 py-1 mx-2 rounded-md;
+  @apply bg-purple-400 text-white px-3 py-1 mx-2 rounded-sm inline-flex items-center text-sm shadow-sm;
 }
 
 .btn-form {

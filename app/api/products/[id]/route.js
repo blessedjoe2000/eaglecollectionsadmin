@@ -1,8 +1,10 @@
 import { mongooseConnect } from "@/app/lib/connectDb";
 import Product from "@/app/model/Product";
+import { isAdminRequest } from "../../auth/[...nextauth]/route";
 
 export async function GET(req, ctx) {
   await mongooseConnect();
+  await isAdminRequest();
 
   try {
     const { id } = ctx.params;
@@ -17,6 +19,7 @@ export async function GET(req, ctx) {
 
 export async function PATCH(req, ctx) {
   await mongooseConnect();
+  await isAdminRequest();
 
   const { id } = ctx.params;
   try {
@@ -46,6 +49,7 @@ export async function PATCH(req, ctx) {
 
 export async function DELETE(req, ctx) {
   await mongooseConnect();
+  await isAdminRequest();
 
   const { id } = ctx.params;
   try {
