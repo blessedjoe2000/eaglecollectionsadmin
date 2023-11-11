@@ -13,11 +13,11 @@ table {
   @apply w-full my-5;
 }
 
-table thead tr td {
-  @apply bg-purple-200 font-bold text-sm uppercase;
+table thead tr th {
+  @apply bg-purple-200 text-sm uppercase text-left;
 }
 
-table tr td {
+table tbody tr td {
   @apply p-1;
 }
 

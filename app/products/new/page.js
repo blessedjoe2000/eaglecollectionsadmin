@@ -1,7 +1,7 @@
 "use client";
 
 import Layout from "@/app/components/Layout";
-import ProductForm from "@/app/components/productForm";
+import ProductForm from "@/app/components/ProductForm";
 
 function NewProducts() {
   return (

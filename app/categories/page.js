@@ -221,12 +221,12 @@ function Categories({ swal }) {
         </div>
       </form>
       {!editedCategory && (
-        <table className="">
+        <table className="auto">
           <thead>
             <tr>
-              <td>Categories</td>
-              <td>Parent Category</td>
-              <td></td>
+              <th>Categories</th>
+              <th>Parent Category</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
