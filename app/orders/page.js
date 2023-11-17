@@ -16,7 +16,11 @@ function Orders() {
     getOrders();
   }, []);
 
-  console.log("orders", orders);
+  const dateToUSFormat = (dateString) => {
+    const originalDate = new Date(dateString);
+
+    return originalDate.toLocaleString("en-US");
+  };
 
   return (
     <Layout>
@@ -24,7 +28,7 @@ function Orders() {
       <table className="auto">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Date & Time</th>
             <th>Recipient</th>
             <th>Products</th>
           </tr>
@@ -32,8 +36,8 @@ function Orders() {
         <tbody>
           {orders.length > 0 &&
             orders?.map((order) => (
-              <tr key={order._id}>
-                <td>{order._id}</td>
+              <tr key={order._id} className="shadow-lg">
+                <td>{dateToUSFormat(order.createdAt)}</td>
                 <td>
                   {order.name} <br /> {order.email}
                   <br />
@@ -44,9 +48,10 @@ function Orders() {
                   <br />
                   {order.country}
                 </td>
-                {order.line_items.map((product) => (
-                  <td className="flex">
-                    {product.price_data.product_data?.name}
+                {order.line_items.map((product, index) => (
+                  <td key={index} className="flex gap-2">
+                    <div>{product.price_data.product_data?.name}</div>
+                    <div>x {product.quantity}</div>
                     <br />
                   </td>
                 ))}
