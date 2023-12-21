@@ -1,6 +1,7 @@
-import Provider from "../components/Provider";
+import Provider from "../components/Provider/Provider";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import { Footer } from "@/components/Footer/Footer";
 
 export const metadata = {
   title: "Eagle Collection Store Admin",

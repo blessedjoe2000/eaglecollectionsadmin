@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import Layout from "../../components/Layout";
+import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Products() {
   const [allProducts, setAllProducts] = useState([]);
@@ -22,25 +23,40 @@ export default function Products() {
     <Layout>
       <Link
         href="/products/new"
-        className="bg-purple-400 p-2 rounded-lg text-white "
+        className="bg-main-purple px-2 py-1 rounded-md text-white "
       >
         Add new product
       </Link>
 
-      <table className="">
-        <thead>
-          <tr>
-            <td>Product Name</td>
-            <td>Action</td>
-          </tr>
-        </thead>
-        <tbody>
+      <div className="my-5">
+        <div className="flex justify-between items-center bg-main-pink px-2 text-white my-5">
+          <div>Images</div>
+          <div className="">Product Names</div>
+          <div>Action</div>
+        </div>
+        <div>
           {allProducts &&
             allProducts.map((product) => {
               return (
-                <tr key={product._id}>
-                  <td>{product.title}</td>
-                  <td className="">
+                <div
+                  key={product._id}
+                  className="flex justify-between items-center py-1 border-b-2 border-light-pink"
+                >
+                  <div>
+                    <Image
+                      src={product.images?.[0]}
+                      alt={product.title}
+                      width={30}
+                      height={20}
+                      priority
+                      className="rounded-sm"
+                    />
+                  </div>
+                  <div className="">
+                    {product.title.slice(0, 1).toUpperCase() +
+                      product.title.slice(1)}
+                  </div>
+                  <div className="flex gap-2">
                     <Link
                       className="btn-edit"
                       href={"/products/edit/" + product._id}
@@ -63,7 +79,7 @@ export default function Products() {
                     </Link>
                     <Link
                       href={`/products/delete/${product._id}`}
-                      className="btn-delete"
+                      className="btn-delete hover:text-main-purple"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +87,7 @@ export default function Products() {
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="w-4 h-4"
+                        className="w-4 h-4 "
                       >
                         <path
                           strokeLinecap="round"
@@ -81,12 +97,12 @@ export default function Products() {
                       </svg>
                       Delete
                     </Link>
-                  </td>
-                </tr>
+                  </div>
+                </div>
               );
             })}
-        </tbody>
-      </table>
+        </div>
+      </div>
     </Layout>
   );
 }
