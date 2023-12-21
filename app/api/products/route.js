@@ -1,5 +1,5 @@
-import { mongooseConnect } from "@/app/lib/connectDb";
-import Product from "@/app/model/Product";
+import { mongooseConnect } from "@/lib/connectDb";
+import Product from "@/model/Product";
 import { isAdminRequest } from "../auth/[...nextauth]/route";
 
 export async function POST(req) {
@@ -8,8 +8,16 @@ export async function POST(req) {
   await isAdminRequest();
 
   try {
-    const { title, description, price, images, category, properties } =
-      await req.json();
+    const {
+      title,
+      description,
+      price,
+      images,
+      category,
+      newPrice,
+      colors,
+      sizes,
+    } = await req.json();
 
     const productData = await Product.create({
       title,
@@ -17,7 +25,9 @@ export async function POST(req) {
       price,
       images,
       category,
-      properties,
+      newPrice,
+      colors,
+      sizes,
     });
 
     return new Response(JSON.stringify(productData), { status: 201 });

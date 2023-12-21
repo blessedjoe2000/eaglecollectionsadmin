@@ -1,6 +1,6 @@
 "use client";
 
-import Layout from "@/app/components/Layout";
+import Layout from "@/components/Layout";
 import axios from "axios";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";

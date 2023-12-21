@@ -1,5 +1,5 @@
-import { mongooseConnect } from "@/app/lib/connectDb";
-import Order from "@/app/model/Order";
+import { mongooseConnect } from "@/lib/connectDb";
+import Order from "@/model/Order";
 
 export async function POST(req) {
   //connected to database

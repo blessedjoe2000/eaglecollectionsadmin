@@ -22,7 +22,7 @@ table tbody tr td {
 }
 
 h1 {
-  @apply text-purple-600 mb-2 text-xl;
+  @apply text-sharp-purple mb-2 text-2xl;
 }
 input,
 textarea,
@@ -34,11 +34,11 @@ select {
 input:focus,
 textarea:focus,
 select:focus {
-  @apply border-purple-600;
+  @apply border-2 border-main-pink;
 }
 
 label {
-  @apply text-purple-600 text-sm;
+  @apply text-main-pink;
 }
 
 .required {
@@ -46,7 +46,7 @@ label {
 }
 
 .btn-save {
-  @apply flex bg-purple-400 px-3 py-1 rounded-md  text-white;
+  @apply flex bg-main-purple px-3 py-1 rounded-md  text-white;
 }
 
 .btn-cancel {
@@ -54,7 +54,7 @@ label {
 }
 
 .btn-delete {
-  @apply bg-red-600 text-white px-3 py-1 rounded-sm inline-flex items-center text-sm shadow-sm;
+  @apply bg-main-pink text-white px-3 py-1 rounded-sm inline-flex items-center text-sm shadow-sm;
 }
 
 .btn-edit {
@@ -63,6 +63,10 @@ label {
 
 .btn-form {
   @apply bg-pink-300 text-sm mb-2 px-2 py-1 rounded-lg mt-2;
+}
+
+a:hover {
+  @apply text-sharp-pink;
 }
 
 /* @layer base {

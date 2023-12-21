@@ -1,6 +1,6 @@
 "use client";
 
-import Layout from "../components/Layout";
+import Layout from "../../components/Layout";
 
 function Settings() {
   return <Layout>Settings</Layout>;
