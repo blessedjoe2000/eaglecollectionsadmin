@@ -13,13 +13,13 @@ table {
   @apply w-full my-5;
 }
 
-table thead tr th {
+/* table thead tr th {
   @apply bg-purple-200 text-sm uppercase text-left;
 }
 
 table tbody tr td {
   @apply p-1;
-}
+} */
 
 h1 {
   @apply text-sharp-purple mb-2 text-2xl;
@@ -27,14 +27,8 @@ h1 {
 input,
 textarea,
 select {
-  @apply border border-gray-200 rounded-sm w-full mb-2 p-1;
-  @apply shadow-md;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  @apply border-2 border-main-pink;
+  @apply border border-gray-200 rounded-sm w-full mb-2 p-1 outline-none focus-visible:border-main-pink;
+  @apply shadow-sm;
 }
 
 label {

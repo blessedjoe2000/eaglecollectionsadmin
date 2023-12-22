@@ -5,6 +5,7 @@ import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Spinner from "@/components/Spinner/Spinner";
 
 export default function Products() {
   const [allProducts, setAllProducts] = useState([]);
@@ -18,6 +19,10 @@ export default function Products() {
   useEffect(() => {
     getAllProducts();
   }, []);
+
+  if (!allProducts) {
+    return <Spinner />;
+  }
 
   return (
     <Layout>

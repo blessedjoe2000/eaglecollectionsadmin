@@ -10,19 +10,69 @@ function Layout({ children }) {
 
   const { data: session } = useSession();
 
-  const login = () => {
-    signIn("google");
-    toast.success("product updated successfully", {
-      style: {
-        border: "1px solid #01B700",
-        padding: "16px",
-        color: "#01B700",
-      },
-      iconTheme: {
-        primary: "#01B700",
-        secondary: "#FFFAEE",
-      },
-    });
+  const login = async () => {
+    try {
+      setIsLoading(true);
+      await signIn("google");
+      toast.success("Login successful", {
+        style: {
+          border: "1px solid #01B700",
+          padding: "16px",
+          color: "#01B700",
+        },
+        iconTheme: {
+          primary: "#01B700",
+          secondary: "#FFFAEE",
+        },
+      });
+    } catch (error) {
+      console.error("Login failed:", error);
+
+      toast.error("Login failed", {
+        style: {
+          border: "1px solid #FF0000",
+          padding: "16px",
+          color: "#FF0000",
+        },
+        iconTheme: {
+          primary: "#FF0000",
+          secondary: "#FFFAEE",
+        },
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      toast.success("Logout successful", {
+        style: {
+          border: "1px solid #01B700",
+          padding: "16px",
+          color: "#01B700",
+        },
+        iconTheme: {
+          primary: "#01B700",
+          secondary: "#FFFAEE",
+        },
+      });
+      await signOut();
+    } catch (error) {
+      console.error("Login failed:", error);
+
+      toast.error("Login failed", {
+        style: {
+          border: "1px solid #FF0000",
+          padding: "16px",
+          color: "#FF0000",
+        },
+        iconTheme: {
+          primary: "#FF0000",
+          secondary: "#FFFAEE",
+        },
+      });
+    }
   };
 
   if (!session) {
