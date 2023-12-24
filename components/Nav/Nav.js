@@ -74,7 +74,7 @@ function Nav({ showMobile }) {
         </Link>
 
         <Link
-          href="/orders"
+          href={`/orders/page/1`}
           className={pathname.includes("/orders") ? activeLink : inactiveLink}
         >
           <svg

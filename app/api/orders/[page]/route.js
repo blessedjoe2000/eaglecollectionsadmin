@@ -13,10 +13,19 @@ export async function POST(req) {
   }
 }
 
-export async function GET(req) {
+export async function GET(req, ctx) {
   await mongooseConnect();
 
-  const orders = await Order.find().sort({ createdAt: -1 });
+  let { page } = ctx.params;
+  page = parseInt(page);
+  const itemLimit = 10;
+
+  const skipPage = (page - 1) * itemLimit;
+
+  const orders = await Order.find()
+    .sort({ createdAt: -1 })
+    .limit(itemLimit)
+    .skip(skipPage);
 
   try {
     return new Response(JSON.stringify(orders), { status: 200 });
