@@ -6,7 +6,6 @@ import axios from "axios";
 import Image from "next/image";
 import Spinner from "@/components/Spinner/Spinner";
 import Link from "next/link";
-import Layout from "@/components/Layout/Layout";
 import { usePathname } from "next/navigation";
 
 function Orders() {
@@ -40,8 +39,8 @@ function Orders() {
   }
 
   return (
-    <Layout>
-      <h1 className="text-center">Orders Received</h1>
+    <div className="mx-5 mb-10 mt-5">
+      <h1 className="text-center py-2">Orders Received</h1>
       <div className="">
         <div className="flex justify-between items-center bg-main-pink text-white px-2 gap-2">
           <div>Date & Time</div>
@@ -147,7 +146,7 @@ function Orders() {
           )}
         </div>
       </div>
-    </Layout>
+    </div>
   );
 }
 

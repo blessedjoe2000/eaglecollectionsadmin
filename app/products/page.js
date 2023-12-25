@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -25,7 +24,7 @@ export default function Products() {
   }
 
   return (
-    <Layout>
+    <div className="mx-5 mb-10 mt-5">
       <Link
         href="/products/new"
         className="bg-main-purple px-2 py-1 rounded-md text-white "
@@ -108,6 +107,6 @@ export default function Products() {
             })}
         </div>
       </div>
-    </Layout>
+    </div>
   );
 }

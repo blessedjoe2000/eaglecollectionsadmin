@@ -1,14 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Layout from "../components/Layout/Layout";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
+import Spinner from "@/components/Spinner/Spinner";
 
 export default function Home() {
-  const { data: session } = useSession({
-    required: true,
-  });
+  const { data: session } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -17,18 +15,13 @@ export default function Home() {
     }
   }, [session, router]);
 
+  if (session) {
+    router.push("/orders/page/1");
+  }
+
   return (
-    <Layout>
-      <div className="flex justify-between">
-        <div className="">Welcome, {session?.user?.name}</div>
-        <div className="">
-          <img
-            src={session?.user?.image}
-            alt={`profile of ${session?.user?.name}`}
-            className=" w-10 h-10 rounded-full "
-          />
-        </div>
-      </div>
-    </Layout>
+    <div className="flex justify-center items-center py-5">
+      <Spinner />
+    </div>
   );
 }
