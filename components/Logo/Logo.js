@@ -9,7 +9,7 @@ export default function Logo() {
         src={logo}
         alt="eagle collections logo"
         width="160"
-        className="p-4 bg-black"
+        className="p-4 bg-black "
         priority
       />
     </Link>

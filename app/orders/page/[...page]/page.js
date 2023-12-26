@@ -6,11 +6,14 @@ import axios from "axios";
 import Image from "next/image";
 import Spinner from "@/components/Spinner/Spinner";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
   const pathname = usePathname();
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   let pageId = pathname.split("/").pop();
 
@@ -28,14 +31,32 @@ function Orders() {
     getOrders();
   }, [pageId]);
 
+  useEffect(() => {
+    if (!session) {
+      router.push("/login");
+    }
+  }, [session, status, router]);
+
   const dateToUSFormat = (dateString) => {
     const originalDate = new Date(dateString);
 
     return originalDate.toLocaleString("en-US");
   };
 
-  if (!orders) {
-    return <Spinner />;
+  if (!orders.length) {
+    return (
+      <div>
+        <p className="text-center font-bold">You do not have any order.</p>
+      </div>
+    );
+  }
+
+  if (!session) {
+    return (
+      <div className="flex justify-center items-center py-5">
+        <Spinner />
+      </div>
+    );
   }
 
   return (

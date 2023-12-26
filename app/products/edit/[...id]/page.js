@@ -1,6 +1,5 @@
 "use client";
 
-import Layout from "@/components/Layout/Layout";
 import ProductForm from "@/components/ProductForm/ProductForm";
 import axios from "axios";
 import { usePathname } from "next/navigation";
@@ -17,6 +16,17 @@ export default function EditProduct() {
       return;
     }
     axios.get("/api/products/" + id).then((response) => {
+      toast.success("Product edited successfully", {
+        style: {
+          border: "1px solid #01B700",
+          padding: "16px",
+          color: "#01B700",
+        },
+        iconTheme: {
+          primary: "#01B700",
+          secondary: "#FFFAEE",
+        },
+      });
       setProductInfo(response.data);
     });
   }, [id]);

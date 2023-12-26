@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -23,7 +23,7 @@ function Login() {
             className="bg-white p-2 px-4 rounded-lg"
             onClick={() => signIn("google")}
           >
-            Login with Google
+            <p>Login with Google</p>
           </button>
         </div>
       </div>

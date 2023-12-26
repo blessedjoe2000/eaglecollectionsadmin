@@ -1,6 +1,5 @@
 "use client";
 
-import Layout from "@/components/Layout/Layout";
 import ProductForm from "@/components/ProductForm/ProductForm";
 
 function NewProducts() {

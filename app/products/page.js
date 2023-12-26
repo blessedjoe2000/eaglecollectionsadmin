@@ -5,9 +5,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Spinner from "@/components/Spinner/Spinner";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Products() {
   const [allProducts, setAllProducts] = useState([]);
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   const getAllProducts = async () => {
     const response = await axios.get("/api/products");
@@ -17,10 +21,28 @@ export default function Products() {
 
   useEffect(() => {
     getAllProducts();
-  }, []);
+  }, [allProducts]);
+
+  useEffect(() => {
+    if (!session) {
+      router.push("/login");
+    }
+  }, [session, status, router]);
 
   if (!allProducts) {
-    return <Spinner />;
+    return (
+      <div className="flex justify-center items-center py-5">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!session) {
+    return (
+      <div className="flex justify-center items-center py-5">
+        <Spinner />
+      </div>
+    );
   }
 
   return (
