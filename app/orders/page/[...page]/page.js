@@ -45,7 +45,7 @@ function Orders() {
 
   if (!orders.length) {
     return (
-      <div>
+      <div className="my-10">
         <p className="text-center font-bold">You do not have any order.</p>
       </div>
     );

@@ -4,6 +4,7 @@ import ProductForm from "@/components/ProductForm/ProductForm";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function EditProduct() {
   const pathname = usePathname();
@@ -16,25 +17,14 @@ export default function EditProduct() {
       return;
     }
     axios.get("/api/products/" + id).then((response) => {
-      toast.success("Product edited successfully", {
-        style: {
-          border: "1px solid #01B700",
-          padding: "16px",
-          color: "#01B700",
-        },
-        iconTheme: {
-          primary: "#01B700",
-          secondary: "#FFFAEE",
-        },
-      });
       setProductInfo(response.data);
     });
   }, [id]);
 
   return (
-    <Layout>
+    <div className="mx-5 mt-5 mb-10">
       <h1 className=" mb-2 ">Edit Product</h1>
       {productInfo && <ProductForm {...productInfo} />}
-    </Layout>
+    </div>
   );
 }

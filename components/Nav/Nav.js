@@ -8,6 +8,7 @@ import Logo from "../Logo/Logo";
 import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 function Nav() {
   const pathname = usePathname();
