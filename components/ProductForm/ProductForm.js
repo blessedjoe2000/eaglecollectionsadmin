@@ -41,6 +41,7 @@ export default function ProductForm({
     "Jewelries",
     "Beads",
     "Slippers",
+    "Accessories",
     "Bags",
     "Shoes and Bags",
     "clutches",

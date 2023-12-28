@@ -24,7 +24,8 @@ module.exports = {
         "main-red": "#dd0426",
       },
       fontFamily: {
-        bodyFont: ["Mukta", "sans-serif"],
+        muktaFont: ["Mukta", "sans-serif"],
+        robotoFont: ["Roboto", "sans-serif"],
       },
     },
   },

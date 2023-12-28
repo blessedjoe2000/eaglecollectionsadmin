@@ -43,7 +43,7 @@ function Nav() {
   };
 
   return (
-    <div>
+    <div className="font-robotoFont">
       {session && (
         <nav
           className={`   text-white px-5 py-2 bg-main-purple sm:h-24 h-18  md:static md:w-auto transition-all`}
