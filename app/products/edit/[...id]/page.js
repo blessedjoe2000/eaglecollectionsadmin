@@ -1,10 +1,10 @@
 "use client";
 
-import Layout from "@/app/components/Layout";
-import ProductForm from "@/app/components/productForm";
+import ProductForm from "@/components/ProductForm/ProductForm";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function EditProduct() {
   const pathname = usePathname();
@@ -22,9 +22,9 @@ export default function EditProduct() {
   }, [id]);
 
   return (
-    <Layout>
-      <h1 className="text-purple-700 mb-2 ">Edit Product</h1>
+    <div className="mx-5 mt-5 mb-10">
+      <h1 className=" mb-2 ">Edit Product</h1>
       {productInfo && <ProductForm {...productInfo} />}
-    </Layout>
+    </div>
   );
 }

@@ -1,12 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import Layout from "../components/Layout";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import Spinner from "@/components/Spinner/Spinner";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Products() {
   const [allProducts, setAllProducts] = useState([]);
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   const getAllProducts = async () => {
     const response = await axios.get("/api/products");
@@ -16,31 +21,68 @@ export default function Products() {
 
   useEffect(() => {
     getAllProducts();
-  }, []);
+  }, [allProducts]);
+
+  useEffect(() => {
+    if (!session) {
+      router.push("/login");
+    }
+  }, [session, status, router]);
+
+  if (!allProducts) {
+    return (
+      <div className="flex justify-center items-center py-5">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!session) {
+    return (
+      <div className="flex justify-center items-center py-5">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
-    <Layout>
+    <div className="mx-5 mb-10 mt-5">
       <Link
         href="/products/new"
-        className="bg-purple-400 p-2 rounded-lg text-white "
+        className="bg-main-purple px-2 py-1 rounded-md text-white "
       >
         Add new product
       </Link>
 
-      <table className="">
-        <thead>
-          <tr>
-            <td>Product Name</td>
-            <td>Action</td>
-          </tr>
-        </thead>
-        <tbody>
+      <div className="my-5">
+        <div className="flex justify-between items-center bg-main-pink px-2 text-white my-5">
+          <div>Images</div>
+          <div className="">Product Names</div>
+          <div>Action</div>
+        </div>
+        <div>
           {allProducts &&
             allProducts.map((product) => {
               return (
-                <tr key={product._id}>
-                  <td>{product.title}</td>
-                  <td className="">
+                <div
+                  key={product._id}
+                  className="flex justify-between items-center py-1 border-b-2 border-light-pink"
+                >
+                  <div>
+                    <Image
+                      src={product.images?.[0]}
+                      alt={product.title}
+                      width={30}
+                      height={20}
+                      priority
+                      className="rounded-sm"
+                    />
+                  </div>
+                  <div className="">
+                    {product.title.slice(0, 1).toUpperCase() +
+                      product.title.slice(1)}
+                  </div>
+                  <div className="flex gap-2">
                     <Link
                       className="btn-edit"
                       href={"/products/edit/" + product._id}
@@ -63,7 +105,7 @@ export default function Products() {
                     </Link>
                     <Link
                       href={`/products/delete/${product._id}`}
-                      className="btn-delete"
+                      className="btn-delete hover:text-main-purple"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +113,7 @@ export default function Products() {
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="w-4 h-4"
+                        className="w-4 h-4 "
                       >
                         <path
                           strokeLinecap="round"
@@ -81,12 +123,12 @@ export default function Products() {
                       </svg>
                       Delete
                     </Link>
-                  </td>
-                </tr>
+                  </div>
+                </div>
               );
             })}
-        </tbody>
-      </table>
-    </Layout>
+        </div>
+      </div>
+    </div>
   );
 }

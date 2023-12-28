@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -11,19 +11,19 @@ function Login() {
 
   useEffect(() => {
     if (session) {
-      router.push("/");
+      router.push("/orders/page/1");
     }
   }, [session]);
 
   if (!session) {
     return (
-      <div className="bg-purple-300 h-screen  flex items-center justify-center">
+      <div className="bg-main-purple h-screen  flex items-center justify-center">
         <div className="">
           <button
             className="bg-white p-2 px-4 rounded-lg"
             onClick={() => signIn("google")}
           >
-            Login with Google
+            <p>Login with Google</p>
           </button>
         </div>
       </div>

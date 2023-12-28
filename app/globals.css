@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Mukta:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,32 +16,18 @@ table {
   @apply w-full my-5;
 }
 
-table thead tr td {
-  @apply bg-purple-200 font-bold text-sm uppercase;
-}
-
-table tr td {
-  @apply p-1;
-}
-
 h1 {
-  @apply text-purple-600 mb-2 text-xl;
+  @apply text-sharp-purple mb-2 text-2xl;
 }
 input,
 textarea,
 select {
-  @apply border border-gray-200 rounded-sm w-full mb-2 p-1;
-  @apply shadow-md;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  @apply border-purple-600;
+  @apply border border-gray-200 rounded-sm w-full mb-2 p-1 outline-none focus-visible:border-main-pink;
+  @apply shadow-sm;
 }
 
 label {
-  @apply text-purple-600 text-sm;
+  @apply text-main-pink;
 }
 
 .required {
@@ -46,24 +35,31 @@ label {
 }
 
 .btn-save {
-  @apply flex bg-purple-400 px-3 py-1 rounded-md  text-white;
+  @apply flex bg-main-purple px-2 py-1 rounded-md  text-white;
 }
 
 .btn-cancel {
-  @apply bg-gray-500 px-3 py-1 text-white rounded-md;
+  @apply bg-gray-500 px-2 py-1 text-white rounded-md;
 }
 
 .btn-delete {
-  @apply bg-red-600 text-white px-3 py-1 rounded-sm inline-flex items-center text-sm shadow-sm;
+  @apply bg-main-pink text-white px-2 py-1 rounded-sm inline-flex items-center text-sm shadow-sm;
 }
 
 .btn-edit {
-  @apply bg-purple-400 text-white px-3 py-1 mx-2 rounded-sm inline-flex items-center text-sm shadow-sm;
+  @apply bg-main-purple text-white px-2 py-1  rounded-sm inline-flex items-center text-sm shadow-sm;
 }
 
 .btn-form {
   @apply bg-pink-300 text-sm mb-2 px-2 py-1 rounded-lg mt-2;
 }
 
-/* @layer base {
-} */
+a:hover {
+  @apply text-sharp-pink;
+}
+
+h1,
+h2,
+h3 {
+  @apply font-robotoFont text-main-pink text-center;
+}

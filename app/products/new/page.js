@@ -1,14 +1,13 @@
 "use client";
 
-import Layout from "@/app/components/Layout";
-import ProductForm from "@/app/components/productForm";
+import ProductForm from "@/components/ProductForm/ProductForm";
 
 function NewProducts() {
   return (
-    <Layout>
-      <h1 className="text-purple-700 mb-2 text-xl ">New Product</h1>
+    <div className="mx-5 mt-5 mb-10">
+      <h1 className=" mb-2 ">New Product</h1>
       <ProductForm />
-    </Layout>
+    </div>
   );
 }
 

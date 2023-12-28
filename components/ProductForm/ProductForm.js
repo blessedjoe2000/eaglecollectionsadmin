@@ -1,9 +1,10 @@
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import Spinner from "./Spinner";
+import { useState } from "react";
+import Spinner from "../Spinner/Spinner";
 import { ReactSortable } from "react-sortablejs";
+import toast from "react-hot-toast";
 
 export default function ProductForm({
   _id,
@@ -11,21 +12,45 @@ export default function ProductForm({
   images: existingImages,
   description: existingDescription,
   price: existingPrice,
+  newPrice: existingNewPrice,
+  colors: existingColors,
+  sizes: existingSizes,
   category: existingCategory,
-  properties: existingProperties,
 }) {
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setDescription] = useState(existingDescription || "");
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImages || []);
-  const [category, setCategory] = useState(existingCategory || "");
-  const [productProperties, setProductProperties] = useState(
-    existingProperties || {}
-  );
+  const [newPrice, setNewPrice] = useState(existingNewPrice || "");
+  const [colors, setColors] = useState(existingColors || "");
+  const [sizes, setSizes] = useState(existingSizes || "");
+  const [category, setCategory] = useState(existingCategory || []);
   const [isUploading, setIsUploading] = useState(false);
-  const [categories, setCategories] = useState([]);
 
   const router = useRouter();
+
+  const categories = [
+    "Uncategorized",
+    "Laces",
+    "Georges",
+    "Ankara",
+    "Headtie",
+    "Shoes",
+    "Brocade",
+    "Intorika",
+    "Jewelries",
+    "Beads",
+    "Slippers",
+    "Accessories",
+    "Bags",
+    "Shoes and Bags",
+    "clutches",
+    "Belts",
+    "Men Shoes",
+    "Men Hats",
+    "Dresses",
+    "Men Fabrics",
+  ];
 
   const uploadImages = async (e) => {
     const files = e?.target?.files;
@@ -57,23 +82,83 @@ export default function ProductForm({
       description,
       price,
       images,
+      newPrice,
+      colors,
+      sizes,
       category,
-      properties: productProperties,
     };
 
-    if (!title || !price) {
-      console.log("title and price is required");
-      return;
+    if (!title) {
+      return toast.error("Title is required. Please enter title", {
+        style: {
+          border: "1px solid #f72585",
+          padding: "16px",
+          color: "#f72585",
+        },
+        iconTheme: {
+          primary: "#f72585",
+          secondary: "#FFFAEE",
+        },
+      });
     }
 
+    if (!price) {
+      return toast.error("Price is required. Please enter price", {
+        style: {
+          border: "1px solid #f72585",
+          padding: "16px",
+          color: "#f72585",
+        },
+        iconTheme: {
+          primary: "#f72585",
+          secondary: "#FFFAEE",
+        },
+      });
+    }
+    if (category === "Uncategorized") {
+      return toast.error("Choose product category", {
+        style: {
+          border: "1px solid #f72585",
+          padding: "16px",
+          color: "#f72585",
+        },
+        iconTheme: {
+          primary: "#f72585",
+          secondary: "#FFFAEE",
+        },
+      });
+    }
     try {
       if (_id) {
         //update product
         await axios.patch(`/api/products/${_id}`, { ...productData });
+        toast.success("product updated successfully", {
+          style: {
+            border: "1px solid #01B700",
+            padding: "16px",
+            color: "#01B700",
+          },
+          iconTheme: {
+            primary: "#01B700",
+            secondary: "#FFFAEE",
+          },
+        });
       } else {
         //create product
         await axios.post("/api/products", productData);
+        toast.success("product created successfully", {
+          style: {
+            border: "1px solid #01B700",
+            padding: "16px",
+            color: "#01B700",
+          },
+          iconTheme: {
+            primary: "#01B700",
+            secondary: "#FFFAEE",
+          },
+        });
       }
+
       router.push("/products");
     } catch (error) {
       console.log(error);
@@ -82,37 +167,6 @@ export default function ProductForm({
 
   const sortImagesOrder = (images) => {
     setImages(images);
-  };
-
-  const getAllCategories = async () => {
-    const response = await axios.get("/api/categories");
-    setCategories(response.data);
-    return response.data;
-  };
-
-  useEffect(() => {
-    getAllCategories();
-  }, []);
-
-  const propertiesToFill = [];
-  if (categories.length > 0 && category) {
-    let CatInfo = categories.find(({ _id }) => _id === category);
-    propertiesToFill.push(...CatInfo.properties);
-    while (CatInfo?.parent?._id) {
-      const parentCat = categories.find(
-        ({ _id }) => _id === CatInfo?.parent?._id
-      );
-      propertiesToFill.push(...parentCat.properties);
-      CatInfo = parentCat;
-    }
-  }
-
-  const handleProductProps = (propName, value) => {
-    setProductProperties((prev) => {
-      const newProductProps = { ...prev };
-      newProductProps[propName] = value;
-      return newProductProps;
-    });
   };
 
   return (
@@ -130,42 +184,56 @@ export default function ProductForm({
           onChange={(e) => setTitle(e.target.value)}
         />
       </div>
+      <div>
+        <label htmlFor="description">Description</label>
+        <textarea
+          name="description"
+          id="description"
+          cols="5"
+          rows="3"
+          placeholder="Enter description..."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        ></textarea>
+      </div>
 
       <div>
-        <label htmlFor="category">Category</label>
+        <label htmlFor="category">Choose Category</label>
         <select
-          className="mb-2"
-          value={category}
-          onChange={(e) => setCategory(e?.target?.value)}
+          className="text-sm"
+          value={category || ""}
+          onChange={(e) => setCategory(e.target.value)}
         >
-          <option value="">Uncategorised</option>
           {categories &&
-            categories.map((category) => (
-              <option value={category?._id} key={category._id}>
-                {category?.name}
+            categories?.map((categoryValue, index) => (
+              <option value={categoryValue} key={index}>
+                {categoryValue}
               </option>
             ))}
         </select>
-        {propertiesToFill &&
-          propertiesToFill.map((p, index) => (
-            <div key={index} className=" ">
-              <label>{p.name[0].toUpperCase() + p.name.substring(1)}</label>
-
-              <select
-                className=""
-                value={productProperties[p.name]}
-                onChange={(e) => handleProductProps(p.name, e?.target.value)}
-              >
-                {p.values.map((v, index) => (
-                  <option key={index} value={v}>
-                    {v}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ))}
       </div>
-
+      <div className="flex items-center gap-2">
+        <label htmlFor="colors">Colors</label>
+        <input
+          className="p-0"
+          name="colors"
+          type="text"
+          placeholder="Enter product colors, separate with comma"
+          value={colors}
+          onChange={(e) => setColors(e.target.value)}
+        />
+      </div>
+      <div className="flex items-center gap-2 py-2">
+        <label htmlFor="sizes">Sizes</label>
+        <input
+          className="p-0"
+          name="sizes"
+          type="text"
+          placeholder="Enter product sizes, separate with comma"
+          value={sizes}
+          onChange={(e) => setSizes(e.target.value)}
+        />
+      </div>
       <label className="mt-4">Photos </label>
       <div className="flex flex-wrap gap-2 mb-2">
         <ReactSortable
@@ -216,19 +284,6 @@ export default function ProductForm({
       </div>
 
       <div>
-        <label htmlFor="description">Description</label>
-        <textarea
-          name="description"
-          id="description"
-          cols="5"
-          rows="3"
-          placeholder="Enter description..."
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        ></textarea>
-      </div>
-
-      <div>
         <label htmlFor="price">
           Price (in USD)<span className="required">*</span>
         </label>
@@ -243,6 +298,18 @@ export default function ProductForm({
         />
       </div>
 
+      <div>
+        <label htmlFor="newPrice">New price (in USD)</label>
+        <input
+          type="number"
+          id="newPrice"
+          placeholder="$"
+          className=""
+          min={0}
+          value={newPrice}
+          onChange={(e) => setNewPrice(e.target.value)}
+        />
+      </div>
       <div className="flex gap-2 mt-2">
         <button
           type="submit"

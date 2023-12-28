@@ -1,5 +1,5 @@
-import { mongooseConnect } from "@/app/lib/connectDb";
-import Product from "@/app/model/Product";
+import { mongooseConnect } from "@/lib/connectDb";
+import Product from "@/model/Product";
 import { isAdminRequest } from "../../auth/[...nextauth]/route";
 
 export async function GET(req, ctx) {

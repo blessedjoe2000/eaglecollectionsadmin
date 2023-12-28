@@ -1,11 +1,11 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import path, { extname, join } from "path";
+import { extname, join } from "path";
 import * as dateFn from "date-fns";
 import { NextResponse } from "next/server";
 import mime from "mime-types";
 import fs from "fs";
 import { stat, mkdir, writeFile } from "fs/promises";
-import { mongooseConnect } from "@/app/lib/connectDb";
+import { mongooseConnect } from "@/lib/connectDb";
 import { isAdminRequest } from "../auth/[...nextauth]/route";
 
 function sanitizeFilename(filename) {
