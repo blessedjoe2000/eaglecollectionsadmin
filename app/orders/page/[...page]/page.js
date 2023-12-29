@@ -65,7 +65,7 @@ function Orders() {
       <div className="">
         <div className="flex justify-between items-center bg-main-pink text-white px-2 gap-2">
           <div>Date & Time</div>
-          <div>Recipient's Info</div>
+          <div>Recipients Info</div>
           <div>Delivery Address</div>
           <div>Products Ordered</div>
           <div className="basis-0">Payment Confirmation</div>

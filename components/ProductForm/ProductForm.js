@@ -5,6 +5,7 @@ import { useState } from "react";
 import Spinner from "../Spinner/Spinner";
 import { ReactSortable } from "react-sortablejs";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 export default function ProductForm({
   _id,
@@ -244,7 +245,7 @@ export default function ProductForm({
           {!!images?.length &&
             images.map((link) => (
               <div className=" h-24" key={link}>
-                <img className="rounded-lg" src={link} alt="product item" />
+                <Image className="rounded-lg" src={link} alt="product item" />
               </div>
             ))}
         </ReactSortable>
