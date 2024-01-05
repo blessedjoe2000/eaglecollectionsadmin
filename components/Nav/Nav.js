@@ -16,27 +16,12 @@ function Nav() {
   const { data: session } = useSession();
 
   const inactiveLink = "flex gap-1 text-white";
-  const activeLink = `flex gap-1 text-sharp-purple bg-white px-2 py-1 rounded-md`;
+  const activeLink = `flex gap-1 text-dark-green bg-white px-2 py-1 rounded-md`;
   const inactiveIcon = "w-6 h-6";
   const activeIcon = `${inactiveIcon} "text-main-pink`;
 
   async function logout() {
-    try {
-      toast.success("you have been logged out", {
-        style: {
-          border: "1px solid #01B700",
-          padding: "16px",
-          color: "#01B700",
-        },
-        iconTheme: {
-          primary: "#01B700",
-          secondary: "#FFFAEE",
-        },
-      });
-      await signOut({ callbackUrl: "/login" });
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
+    await signOut({ callbackUrl: "/login" });
   }
   const toggleDrawer = () => {
     setIsOpen((prevState) => !prevState);
@@ -46,7 +31,7 @@ function Nav() {
     <div className="font-robotoFont">
       {session && (
         <nav
-          className={`   text-white px-5 py-2 bg-main-purple sm:h-24 h-18  md:static md:w-auto transition-all`}
+          className={`   text-white px-5 py-2 bg-dark-green sm:h-24 h-18  md:static md:w-auto transition-all`}
         >
           <div className="flex gap-5 justify-between items-center">
             <div className="mb-4">
@@ -125,7 +110,7 @@ function Nav() {
                     open={isOpen}
                     onClose={toggleDrawer}
                     direction="right"
-                    className="text-black/60 flex flex-col items-center"
+                    className="text-dark-green flex flex-col items-center"
                   >
                     <button onClick={toggleDrawer} className="pb-3 pt-5 ">
                       <Image
@@ -142,7 +127,7 @@ function Nav() {
                     </div>
                     <p className="py-1">{session.user.email}</p>
                     <button
-                      className=" flex items-center px-2 py-1 bg-main-pink rounded-lg text-white hover:text-sharp-purple my-3"
+                      className=" flex items-center px-2 py-1 bg-main-pink rounded-lg text-white hover:text-light-green my-3"
                       onClick={logout}
                     >
                       <svg
@@ -163,7 +148,7 @@ function Nav() {
                     </button>
                     <button
                       onClick={toggleDrawer}
-                      className="flex items-center px-2 bg-main-purple text-white rounded-md mt-10 hover:text-sharp-pink"
+                      className="flex items-center px-2 bg-dark-green text-white rounded-md mt-10 hover:text-light-green"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

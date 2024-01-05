@@ -42,7 +42,9 @@ export default function DeleteProduct() {
 
   return (
     <div className=" flex flex-col justify-center items-center gap-5 mt-5 mb-10">
-      <p className="font-bold text-xl">Are you sure you want to delete?</p>
+      <p className="font-bold text-light-green text-xl">
+        Are you sure you want to delete?
+      </p>
 
       <div className="flex items-center gap-3">
         <div>
@@ -86,7 +88,7 @@ export default function DeleteProduct() {
       <div className="flex gap-1 justify-center text-white">
         <button
           onClick={handleDelete}
-          className=" bg-main-pink text-md px-2 py-1 rounded-md"
+          className=" bg-sharp-pink hover:text-light-green text-md px-2 py-1 rounded-md"
         >
           Delete
         </button>

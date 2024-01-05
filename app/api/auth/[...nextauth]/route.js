@@ -2,11 +2,6 @@ import clientPromise from "@/lib/mongodb";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import NextAuth, { getServerSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import CredentialsProvider from "next-auth/providers/credentials";
-
-import bcrypt from "bcrypt";
-import { signJwtToken } from "@/lib/jwt";
-import { mongooseConnect } from "@/lib/connectDb";
 
 let adminEmail = [];
 
@@ -17,39 +12,6 @@ export const authOptions = {
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
     }),
-
-    // CredentialsProvider({
-    //   type: "credentials",
-    //   credentials: {
-    //     email: { label: "Email", type: "email" },
-    //     password: { label: "Password", type: "password" },
-    //   },
-
-    //   async authorize(credentials, req) {
-    //     const { email, password } = credentials;
-
-    //     await mongooseConnect();
-
-    //     const user = await User.findOne({ email });
-
-    //     if (!user) {
-    //       throw new Error("Invalid credentials");
-    //     }
-
-    //     const comparePassword = await bcrypt.compare(password, user.password);
-
-    //     if (!comparePassword) {
-    //       throw new Error("Invalid credentials");
-    //     } else {
-    //       const { password, ...currentUser } = user._doc;
-    //       const accessToken = signJwtToken(currentUser, { expiresIn: "3d" });
-    //       return {
-    //         ...currentUser,
-    //         accessToken,
-    //       };
-    //     }
-    //   },
-    // }),
   ],
 
   pages: {

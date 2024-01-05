@@ -49,13 +49,13 @@ export default function Products() {
     <div className="mx-5 mb-10 mt-5">
       <Link
         href="/products/new"
-        className="bg-main-purple px-2 py-1 rounded-md text-white "
+        className="bg-dark-green px-2 py-1 rounded-md text-white "
       >
         Add new product
       </Link>
 
       <div className="my-5">
-        <div className="flex justify-between items-center bg-main-pink px-2 text-white my-5">
+        <div className="flex justify-between items-center bg-dark-green p-2  text-white my-5">
           <div>Images</div>
           <div className="">Product Names</div>
           <div>Action</div>
@@ -105,7 +105,7 @@ export default function Products() {
                     </Link>
                     <Link
                       href={`/products/delete/${product._id}`}
-                      className="btn-delete hover:text-main-purple"
+                      className="btn-delete hover:text-light-green"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Spinner from "../Spinner/Spinner";
-import { ReactSortable } from "react-sortablejs";
 import toast from "react-hot-toast";
 import Image from "next/image";
 
@@ -166,10 +165,6 @@ export default function ProductForm({
     }
   };
 
-  const sortImagesOrder = (images) => {
-    setImages(images);
-  };
-
   return (
     <form onSubmit={handleSubmit}>
       <div>
@@ -236,19 +231,19 @@ export default function ProductForm({
         />
       </div>
       <label className="mt-4">Photos </label>
-      <div className="flex flex-wrap gap-2 mb-2">
-        <ReactSortable
-          className="flex flex-wrap gap-1"
-          list={images}
-          setList={sortImagesOrder}
-        >
-          {!!images?.length &&
-            images.map((link) => (
-              <div className=" h-24" key={link}>
-                <Image className="rounded-lg" src={link} alt="product item" />
-              </div>
-            ))}
-        </ReactSortable>
+      <div className="flex flex-wrap gap-1 mb-2">
+        {!!images?.length &&
+          images.map((imgLink, index) => (
+            <div className=" h-24" key={index}>
+              <Image
+                src={imgLink}
+                alt="product image"
+                width={70}
+                height={50}
+                className="rounded-lg"
+              />
+            </div>
+          ))}
         {isUploading && (
           <div className="h-24  p-2 flex items-center">
             <Spinner />
@@ -256,7 +251,7 @@ export default function ProductForm({
         )}
         <label
           htmlFor="images"
-          className=" w-22 h-24 cursor-pointer bg-gray-200 rounded-lg text-purple-600 p-2 flex flex-col justify-center items-center text-sm shadow-sm"
+          className=" w-22 h-24 cursor-pointer bg-gray-200 rounded-lg text-light-green p-2 flex flex-col justify-center items-center text-sm shadow-sm"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

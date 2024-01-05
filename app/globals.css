@@ -17,17 +17,13 @@ table {
 }
 
 h1 {
-  @apply text-sharp-purple mb-2 text-2xl;
+  @apply text-light-green mb-2 text-2xl;
 }
 input,
 textarea,
 select {
-  @apply border border-gray-200 rounded-sm w-full mb-2 p-1 outline-none focus-visible:border-main-pink;
+  @apply border border-gray-200 rounded-sm w-full mb-2 p-1 outline-none focus-visible:border-light-green;
   @apply shadow-sm;
-}
-
-label {
-  @apply text-main-pink;
 }
 
 .required {
@@ -35,7 +31,7 @@ label {
 }
 
 .btn-save {
-  @apply flex bg-main-purple px-2 py-1 rounded-md  text-white;
+  @apply flex bg-dark-green px-2 py-1 rounded-md  text-white hover:text-light-green;
 }
 
 .btn-cancel {
@@ -43,11 +39,11 @@ label {
 }
 
 .btn-delete {
-  @apply bg-main-pink text-white px-2 py-1 rounded-sm inline-flex items-center text-sm shadow-sm;
+  @apply bg-sharp-pink text-white px-2 py-1 rounded-sm inline-flex items-center text-sm shadow-sm;
 }
 
 .btn-edit {
-  @apply bg-main-purple text-white px-2 py-1  rounded-sm inline-flex items-center text-sm shadow-sm;
+  @apply bg-dark-green text-white px-2 py-1  rounded-sm inline-flex items-center text-sm shadow-sm;
 }
 
 .btn-form {
@@ -55,7 +51,7 @@ label {
 }
 
 a:hover {
-  @apply text-sharp-pink;
+  @apply text-light-green;
 }
 
 h1,
