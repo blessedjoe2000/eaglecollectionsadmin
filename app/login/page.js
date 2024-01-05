@@ -17,7 +17,7 @@ function Login() {
 
   if (!session) {
     return (
-      <div className="bg-main-purple h-screen  flex items-center justify-center">
+      <div className="bg-dark-green h-screen  flex items-center justify-center">
         <div className="">
           <button
             className="bg-white p-2 px-4 rounded-lg"

@@ -13,7 +13,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="font-muktaFont ">
+      <body className="font-muktaFont text-dark-green">
         <Provider>
           <Toaster position="top-right" />
           <Nav />
