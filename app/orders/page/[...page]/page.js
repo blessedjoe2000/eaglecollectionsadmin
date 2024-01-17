@@ -76,13 +76,13 @@ function Orders() {
             orders?.map((order, index) => (
               <div
                 key={index}
-                className="sm:border-b-2 sm:border-light-green py-2 sm:flex justify-between items-center gap-2 px-2 border-b-2 border-sharp-purple"
+                className="sm:border-b-2 sm:border-light-green py-2 sm:flex justify-between items-center gap-2 px-2 border-b-2 border-light-green "
               >
-                <div className="border-b-2 border-light-green sm:border-none ">
+                <div className="border-b-2 border-dark-green/30 sm:border-none ">
                   <p>{dateToUSFormat(order.createdAt).split(",")[0]}</p>
                   <p>{dateToUSFormat(order.createdAt).split(",")[1]}</p>
                 </div>
-                <div className="border-b-2 border-light-green sm:border-none ">
+                <div className="border-b-2 border-dark-green/30 sm:border-none ">
                   <p>
                     {" "}
                     {order.name.split(" ")?.[0].slice(0, 1).toUpperCase() +
@@ -95,7 +95,7 @@ function Orders() {
                   <p>{order.phone}</p>
                 </div>
 
-                <div className="border-b-2 border-light-green sm:border-none ">
+                <div className="border-b-2 border-dark-green/30 sm:border-none ">
                   <div className="flex gap-1">
                     <p>{order?.address?.line1}</p>
                     <p>{order?.address?.line2}</p>
@@ -107,7 +107,7 @@ function Orders() {
                     <p>{order?.address?.country}</p>
                   </div>
                 </div>
-                <div className="border-b-2 border-light-green sm:border-none ">
+                <div className="border-b-2 border-dark-green/30 sm:border-none ">
                   {order.line_items.map((product, index) => (
                     <div key={index} className="flex items-center gap-1">
                       <div className="my-1">
@@ -130,9 +130,14 @@ function Orders() {
                   ))}
                 </div>
 
-                <div className="text-center ">
+                <div className="">
                   {order.paid ? (
-                    <p className="text-alert-green">Yes</p>
+                    <p
+                      className="text-alert-green
+                    "
+                    >
+                      Yes
+                    </p>
                   ) : (
                     <p className="text-sharp-pink">No</p>
                   )}

@@ -4,11 +4,10 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import Logo from "../Logo/Logo";
 import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
 import Image from "next/image";
-import toast from "react-hot-toast";
+import Logo from "../Logo/Logo";
 
 function Nav() {
   const pathname = usePathname();
@@ -35,7 +34,6 @@ function Nav() {
         >
           <div className="flex gap-5 justify-between items-center">
             <div className="mb-4">
-              {" "}
               <Logo />
             </div>
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import logo from "@/public/images/eaglecollectionlogo.png";
+import logo from "@/public/images/eaglecollectionslogowhite.png";
 import Image from "next/image";
 
 export default function Logo() {
@@ -9,7 +9,7 @@ export default function Logo() {
         src={logo}
         alt="eagle collections logo"
         width="160"
-        className="p-4 bg-black "
+        className=""
         priority
       />
     </Link>
