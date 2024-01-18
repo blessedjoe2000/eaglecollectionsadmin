@@ -36,8 +36,6 @@ export async function POST(request) {
   const relativeUploadDir = `${dateFn.format(Date.now(), "dd-MM-Y")}`;
   const uploadDir = join(pathDist, relativeUploadDir);
 
-  console.log("upload directory", uploadDir);
-
   try {
     await stat(uploadDir);
   } catch (e) {
