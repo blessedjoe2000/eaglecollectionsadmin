@@ -34,26 +34,28 @@ export async function POST(request) {
   const pathDist = `${domainUrl}/public/images`;
   const relativeUploadDir = `${dateFn.format(Date.now(), "dd-MM-Y")}`;
   const uploadDir = join(pathDist, relativeUploadDir);
+  const sanitizeUploadDir = sanitizeFilename(uploadDir);
 
-  // try {
-  //   await stat(uploadDir);
-  // } catch (e) {
-  //   return NextResponse.json(
-  //     { error: "Something went wrong up here." },
-  //     { status: 500 }
-  //   );
-  // }
+  console.log("upload directory", sanitizeUploadDir);
 
   try {
-    await stat(uploadDir);
+    await stat(sanitizeUploadDir);
   } catch (e) {
     if (e.code === "ENOENT") {
-      await mkdir(uploadDir, { recursive: true });
+      try {
+        await mkdir(sanitizeUploadDir, { recursive: true });
+      } catch (mkdirError) {
+        console.error(
+          "Error creating directory when uploading a file:",
+          mkdirError
+        );
+        return NextResponse.json(
+          { error: "Failed to create directory for file upload." },
+          { status: 500 }
+        );
+      }
     } else {
-      console.error(
-        "Error while trying to create directory when uploading a file\n",
-        e
-      );
+      console.error("Error checking directory when uploading a file:", e);
       return NextResponse.json(
         { error: "Something went wrong." },
         { status: 500 }
@@ -70,9 +72,9 @@ export async function POST(request) {
 
     console.log("filename", filename);
 
-    await writeFile(`${uploadDir}/${filename}`, buffer);
+    await writeFile(`${sanitizeUploadDir}/${filename}`, buffer);
 
-    const finalFilePath = `${uploadDir}/${filename}`;
+    const finalFilePath = `${sanitizeUploadDir}/${filename}`;
 
     console.log("finalFilePath", finalFilePath);
 
