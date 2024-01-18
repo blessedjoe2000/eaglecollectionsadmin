@@ -25,6 +25,7 @@
     "fetch": "^1.1.0",
     "formidable": "^3.5.1",
     "fs": "^0.0.1-security",
+    "fs-extra": "^11.2.0",
     "jsonwebtoken": "^9.0.0",
     "micro": "^10.0.1",
     "mime-types": "^2.1.35",

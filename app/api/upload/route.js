@@ -29,7 +29,9 @@ export async function POST(request) {
 
   const buffer = Buffer.from(await file.arrayBuffer());
 
-  const pathDist = `/public/images`;
+  const domainUrl = process.env.NEXTAUTH_URL;
+
+  const pathDist = `${domainUrl}/public/images`;
   const relativeUploadDir = `${dateFn.format(Date.now(), "dd-MM-Y")}`;
   const uploadDir = join(pathDist, relativeUploadDir);
 
@@ -40,7 +42,7 @@ export async function POST(request) {
   } catch (e) {
     if (e.code === "ENOENT") {
       try {
-        await fsPromises.mkdir(uploadDir, { recursive: true });
+        await fsExtra.ensureDir(uploadDir);
       } catch (mkdirError) {
         console.error(
           "Error creating directory when uploading a file:",
