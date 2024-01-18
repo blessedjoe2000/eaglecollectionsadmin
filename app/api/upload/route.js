@@ -31,30 +31,28 @@ export async function POST(request) {
 
   const domainUrl = process.env.NEXTAUTH_URL;
 
-  console.log("domainUrl", domainUrl);
-
   const pathDist = `${domainUrl}/public/images`;
   const relativeUploadDir = `${dateFn.format(Date.now(), "dd-MM-Y")}`;
   const uploadDir = join(pathDist, relativeUploadDir);
 
-  // try {
-  //   await stat(uploadDir);
-  // } catch (e) {
-  //   return NextResponse.json(
-  //     { error: "Something went wrong." },
-  //     { status: 500 }
-  //   );
-  // }
+  try {
+    await stat(uploadDir);
+  } catch (e) {
+    return NextResponse.json(
+      { error: "Something went wrong up here." },
+      { status: 500 }
+    );
+  }
 
   try {
     const uniqueSuffix = `${Date.now()}_${Math.round(Math.random() * 1e9)}`;
-
-    console.log("uniqueSuffix", uniqueSuffix);
-
     const fileExtension = extname(file.name);
     const originalFilename = file.name.replace(/\.[^/.]+$/, "");
     const sanitizedFilename = sanitizeFilename(originalFilename);
     const filename = `${sanitizedFilename}_${uniqueSuffix}${fileExtension}`;
+
+    console.log("filename", filename);
+
     await writeFile(`${uploadDir}/${filename}`, buffer);
 
     const finalFilePath = `${uploadDir}/${filename}`;
