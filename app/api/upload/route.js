@@ -35,14 +35,14 @@ export async function POST(request) {
   const relativeUploadDir = `${dateFn.format(Date.now(), "dd-MM-Y")}`;
   const uploadDir = join(pathDist, relativeUploadDir);
 
-  try {
-    await stat(uploadDir);
-  } catch (e) {
-    return NextResponse.json(
-      { error: "Something went wrong up here." },
-      { status: 500 }
-    );
-  }
+  // try {
+  //   await stat(uploadDir);
+  // } catch (e) {
+  //   return NextResponse.json(
+  //     { error: "Something went wrong up here." },
+  //     { status: 500 }
+  //   );
+  // }
 
   try {
     const uniqueSuffix = `${Date.now()}_${Math.round(Math.random() * 1e9)}`;
