@@ -29,9 +29,10 @@ export async function POST(request) {
 
   const buffer = Buffer.from(await file.arrayBuffer());
 
-  const domainUrl = process.env.NEXTAUTH_URL;
+  // const domainUrl = process.env.NEXTAUTH_URL;
 
-  const pathDist = `${domainUrl}/public/images`;
+  const pathDist = join(process.cwd(), `/public/images`);
+
   const relativeUploadDir = `${dateFn.format(Date.now(), "dd-MM-Y")}`;
   const uploadDir = join(pathDist, relativeUploadDir);
 
