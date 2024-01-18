@@ -43,15 +43,14 @@ export async function POST(request) {
   } catch (e) {
     if (e.code === "ENOENT") {
       try {
-        await new Promise(resolve, (reject) => {
-          fs.mkdir(uploadDir, { recursive: true }),
-            (error) => {
-              if (error) {
-                reject(error);
-              } else {
-                resolve();
-              }
-            };
+        await new Promise((resolve, reject) => {
+          fs.mkdir(uploadDir, { recursive: true }, (error) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve();
+            }
+          });
         });
       } catch (mkdirError) {
         console.error(
