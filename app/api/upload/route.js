@@ -30,13 +30,10 @@ export async function POST(request) {
   const buffer = Buffer.from(await file.arrayBuffer());
 
   const domainUrl = process.env.NEXTAUTH_URL;
-  console.log("domainUrl", domainUrl);
 
   const pathDist = `${domainUrl}/public/images`;
   const relativeUploadDir = `${dateFn.format(Date.now(), "dd-MM-Y")}`;
   const uploadDir = join(pathDist, relativeUploadDir);
-
-  console.log("uploadDir", uploadDir);
 
   try {
     await stat(uploadDir);
