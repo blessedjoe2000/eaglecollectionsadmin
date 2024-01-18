@@ -65,10 +65,10 @@ export default function ProductForm({
 
       filesArray.forEach((file) => formData.append("file", file));
 
-      const domainUrl = process.env.NEXTAUTH_URL;
-      console.log("domainUrl", domainUrl);
+      console.log("formData", formData);
+
       try {
-        const response = await axios.post(`${domainUrl}/api/upload`, formData);
+        const response = await axios.post(`/api/upload`, formData);
         setIsUploading(false);
 
         setImages((oldImages) => {
