@@ -44,7 +44,7 @@ export async function POST(request) {
     if (e.code === "ENOENT") {
       try {
         await new Promise((resolve, reject) => {
-          fs.mkdir(uploadDir, { recursive: true }, (error) => {
+          fs.mkdirSync(uploadDir, { recursive: true }, (error) => {
             if (error) {
               reject(error);
             } else {
