@@ -31,18 +31,20 @@ export async function POST(request) {
 
   const domainUrl = process.env.NEXTAUTH_URL;
 
+  console.log("domainUrl", domainUrl);
+
   const pathDist = `${domainUrl}/public/images`;
   const relativeUploadDir = `${dateFn.format(Date.now(), "dd-MM-Y")}`;
   const uploadDir = join(pathDist, relativeUploadDir);
 
-  try {
-    await stat(uploadDir);
-  } catch (e) {
-    return NextResponse.json(
-      { error: "Something went wrong." },
-      { status: 500 }
-    );
-  }
+  // try {
+  //   await stat(uploadDir);
+  // } catch (e) {
+  //   return NextResponse.json(
+  //     { error: "Something went wrong." },
+  //     { status: 500 }
+  //   );
+  // }
 
   try {
     const uniqueSuffix = `${Date.now()}_${Math.round(Math.random() * 1e9)}`;
@@ -56,6 +58,8 @@ export async function POST(request) {
     await writeFile(`${uploadDir}/${filename}`, buffer);
 
     const finalFilePath = `${uploadDir}/${filename}`;
+
+    console.log("finalFilePath", finalFilePath);
 
     const client = new S3Client({
       region: "us-west-1",
