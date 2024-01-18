@@ -3,8 +3,8 @@ import { extname, join, resolve } from "path";
 import * as dateFn from "date-fns";
 import { NextResponse } from "next/server";
 import mime from "mime-types";
-import fs from "fs";
-import { stat, mkdir, writeFile, fsPromises } from "fs/promises";
+import fs, { promises as fsPromises, mkdirSync } from "fs";
+import { stat, mkdir, writeFile } from "fs/promises";
 import { mongooseConnect } from "@/lib/connectDb";
 import { isAdminRequest } from "../auth/[...nextauth]/route";
 
@@ -44,7 +44,7 @@ export async function POST(request) {
     if (e.code === "ENOENT") {
       try {
         await new Promise((resolve, reject) => {
-          fsPromises.mkdir(uploadDir, { recursive: true }, (error) => {
+          fsPromises.mkdirSync(uploadDir, { recursive: true }, (error) => {
             if (error) {
               reject(error);
             } else {
