@@ -65,12 +65,16 @@ export default function ProductForm({
 
       filesArray.forEach((file) => formData.append("file", file));
 
-      const response = await axios.post(`/api/upload`, formData);
-      setIsUploading(false);
+      try {
+        const response = await axios.post(`/api/upload`, formData);
+        setIsUploading(false);
 
-      setImages((oldImages) => {
-        return [...oldImages, ...response.data.links];
-      });
+        setImages((oldImages) => {
+          return [...oldImages, ...response.data.links];
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
