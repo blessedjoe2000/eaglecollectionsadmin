@@ -1,13 +1,12 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { extname, join } from "path";
+import { extname, join, resolve } from "path";
 import * as dateFn from "date-fns";
 import { NextResponse } from "next/server";
 import mime from "mime-types";
-import fs from "fs";
+import fs, { promises as fsPromises } from "fs";
 import { stat, mkdir, writeFile } from "fs/promises";
 import { mongooseConnect } from "@/lib/connectDb";
 import { isAdminRequest } from "../auth/[...nextauth]/route";
-import fsExtra from "fs-extra";
 
 function sanitizeFilename(filename) {
   return filename.replace(/[^a-zA-Z0-9_\u0600-\u06FF.]/g, "_");
@@ -36,12 +35,23 @@ export async function POST(request) {
   const relativeUploadDir = `${dateFn.format(Date.now(), "dd-MM-Y")}`;
   const uploadDir = join(pathDist, relativeUploadDir);
 
+  console.log("upload directory", uploadDir);
+
   try {
     await stat(uploadDir);
   } catch (e) {
     if (e.code === "ENOENT") {
       try {
-        await fsExtra.ensureDir(uploadDir);
+        await new Promise(resolve, (reject) => {
+          fs.mkdir(uploadDir, { recursive: true }),
+            (error) => {
+              if (error) {
+                reject(error);
+              } else {
+                resolve();
+              }
+            };
+        });
       } catch (mkdirError) {
         console.error(
           "Error creating directory when uploading a file:",
