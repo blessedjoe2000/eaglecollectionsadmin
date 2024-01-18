@@ -45,6 +45,23 @@ export async function POST(request) {
   // }
 
   try {
+    await stat(uploadDir);
+  } catch (e) {
+    if (e.code === "ENOENT") {
+      await mkdir(uploadDir, { recursive: true });
+    } else {
+      console.error(
+        "Error while trying to create directory when uploading a file\n",
+        e
+      );
+      return NextResponse.json(
+        { error: "Something went wrong." },
+        { status: 500 }
+      );
+    }
+  }
+
+  try {
     const uniqueSuffix = `${Date.now()}_${Math.round(Math.random() * 1e9)}`;
     const fileExtension = extname(file.name);
     const originalFilename = file.name.replace(/\.[^/.]+$/, "");
