@@ -17,10 +17,9 @@ export async function POST(request) {
   await isAdminRequest();
 
   const formData = await request.formData();
-  console.log("formData", formData);
 
   const file = formData.get("file");
-  console.log("file", file);
+
   if (!file) {
     return NextResponse.json(
       { error: "File blob is required." },
@@ -29,15 +28,16 @@ export async function POST(request) {
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
-  console.log("buffer", buffer);
 
   const domainUrl = process.env.NEXTAUTH_URL;
+  console.log("domainUrl", domainUrl);
 
-  const pathDist = join(process.cwd(), `${domainUrl}/public/images`);
+  const pathDist = `${domainUrl}/public/images`;
   const relativeUploadDir = `${dateFn.format(Date.now(), "dd-MM-Y")}`;
   const uploadDir = join(pathDist, relativeUploadDir);
 
-  console.log("pathDist", pathDist);
+  console.log("uploadDir", uploadDir);
+
   try {
     await stat(uploadDir);
   } catch (e) {
@@ -57,6 +57,9 @@ export async function POST(request) {
 
   try {
     const uniqueSuffix = `${Date.now()}_${Math.round(Math.random() * 1e9)}`;
+
+    console.log("uniqueSuffix", uniqueSuffix);
+
     const fileExtension = extname(file.name);
     const originalFilename = file.name.replace(/\.[^/.]+$/, "");
     const sanitizedFilename = sanitizeFilename(originalFilename);
@@ -64,7 +67,6 @@ export async function POST(request) {
     await writeFile(`${uploadDir}/${filename}`, buffer);
 
     const finalFilePath = `${uploadDir}/${filename}`;
-    console.log("finalFilePath", finalFilePath);
 
     const client = new S3Client({
       region: "us-west-1",

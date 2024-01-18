@@ -65,8 +65,6 @@ export default function ProductForm({
 
       filesArray.forEach((file) => formData.append("file", file));
 
-      console.log("formData", formData);
-
       try {
         const response = await axios.post(`/api/upload`, formData);
         setIsUploading(false);
