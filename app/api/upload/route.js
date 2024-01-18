@@ -3,10 +3,11 @@ import { extname, join } from "path";
 import * as dateFn from "date-fns";
 import { NextResponse } from "next/server";
 import mime from "mime-types";
-import fs, { promises as fsPromises } from "fs";
+import fs from "fs";
 import { stat, mkdir, writeFile } from "fs/promises";
 import { mongooseConnect } from "@/lib/connectDb";
 import { isAdminRequest } from "../auth/[...nextauth]/route";
+import fsExtra from "fs-extra";
 
 function sanitizeFilename(filename) {
   return filename.replace(/[^a-zA-Z0-9_\u0600-\u06FF.]/g, "_");
