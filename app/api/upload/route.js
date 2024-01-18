@@ -3,7 +3,7 @@ import { extname, join } from "path";
 import * as dateFn from "date-fns";
 import { NextResponse } from "next/server";
 import mime from "mime-types";
-import fs from "fs";
+import fs, { promises as fsPromises } from "fs";
 import { stat, mkdir, writeFile } from "fs/promises";
 import { mongooseConnect } from "@/lib/connectDb";
 import { isAdminRequest } from "../auth/[...nextauth]/route";
@@ -29,21 +29,18 @@ export async function POST(request) {
 
   const buffer = Buffer.from(await file.arrayBuffer());
 
-  const domainUrl = process.env.NEXTAUTH_URL;
-
-  const pathDist = `${domainUrl}/public/images`;
+  const pathDist = `/public/images`;
   const relativeUploadDir = `${dateFn.format(Date.now(), "dd-MM-Y")}`;
   const uploadDir = join(pathDist, relativeUploadDir);
-  const sanitizeUploadDir = sanitizeFilename(uploadDir);
 
-  console.log("upload directory", sanitizeUploadDir);
+  console.log("upload directory", uploadDir);
 
   try {
-    await stat(sanitizeUploadDir);
+    await stat(uploadDir);
   } catch (e) {
     if (e.code === "ENOENT") {
       try {
-        await mkdir(sanitizeUploadDir, { recursive: true });
+        await fsPromises.mkdir(uploadDir, { recursive: true });
       } catch (mkdirError) {
         console.error(
           "Error creating directory when uploading a file:",
@@ -72,9 +69,9 @@ export async function POST(request) {
 
     console.log("filename", filename);
 
-    await writeFile(`${sanitizeUploadDir}/${filename}`, buffer);
+    await writeFile(`${uploadDir}/${filename}`, buffer);
 
-    const finalFilePath = `${sanitizeUploadDir}/${filename}`;
+    const finalFilePath = `${uploadDir}/${filename}`;
 
     console.log("finalFilePath", finalFilePath);
 
