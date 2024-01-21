@@ -52,6 +52,7 @@ function Orders() {
         router.push("/login");
       } else {
         await getOrders();
+        Modal.setAppElement("body");
       }
     };
 
@@ -168,10 +169,10 @@ function Orders() {
       <div className="">
         <div className="sm:flex justify-between items-center bg-dark-green text-white px-2 gap-2">
           <div>Date & Time</div>
-          <div>Recipients</div>
-          <div>Address</div>
-          <div>Products</div>
-          <div className="">Payment</div>
+          <div>Recipients info</div>
+          <div>Shipping Address</div>
+          <div>Products ordered</div>
+          <div className="">Payment Confirmation</div>
           <div className="">Status</div>
           <div className="">Action</div>
         </div>
@@ -219,17 +220,35 @@ function Orders() {
                         <Image
                           src={product.price_data.product_data.images?.[0]}
                           alt={`${product.price_data.product_data?.title}`}
-                          width={25}
+                          width={30}
                           height={20}
                           priority
                           className="rounded-sm"
                         />
                       </div>
                       <div>
-                        {product.price_data.product_data?.name
-                          ?.slice(0, 1)
-                          .toUpperCase() +
-                          product.price_data.product_data?.name?.slice(1)}
+                        <p>
+                          {product.price_data.product_data?.name
+                            ?.slice(0, 1)
+                            .toUpperCase() +
+                            product.price_data.product_data?.name?.slice(1)}
+                        </p>
+                        <p>
+                          {product.price_data.product_data?.colors
+                            ? product.price_data.product_data?.colors
+                                ?.slice(0, 1)
+                                .toUpperCase() +
+                              product.price_data.product_data?.colors?.slice(1)
+                            : ""}
+                        </p>
+                        <p>
+                          {product.price_data.product_data?.sizes
+                            ? product.price_data.product_data?.sizes
+                                ?.slice(0, 1)
+                                .toUpperCase() +
+                              product.price_data.product_data?.sizes?.slice(1)
+                            : ""}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -272,27 +291,29 @@ function Orders() {
                     onRequestClose={closeModal}
                     style={customStyles}
                   >
-                    <h2 ref={(_subtitle) => (subtitle = _subtitle)}>
-                      Update Status
-                    </h2>
-                    <form onSubmit={handleSubmit}>
-                      <input
-                        type="text"
-                        name="status"
-                        placeholder="update status..."
-                        value={orderStatus}
-                        onChange={(e) => setOrderStatus(e.target.value)}
-                      />
+                    <div className="flex flex-col justify-center items-center">
+                      <h2 ref={(_subtitle) => (subtitle = _subtitle)}>
+                        Update Status
+                      </h2>
+                      <form onSubmit={handleSubmit}>
+                        <input
+                          type="text"
+                          name="status"
+                          placeholder="update status..."
+                          value={orderStatus}
+                          onChange={(e) => setOrderStatus(e.target.value)}
+                        />
 
-                      <div className="flex gap-1 text-sm">
-                        <button className="btn-save" type="submit">
-                          Save
-                        </button>
-                        <button className="btn-cancel" onClick={closeModal}>
-                          Close
-                        </button>
-                      </div>
-                    </form>
+                        <div className="flex gap-1 text-sm items-center justify-center">
+                          <button className="btn-save" type="submit">
+                            Save
+                          </button>
+                          <button className="btn-cancel" onClick={closeModal}>
+                            Close
+                          </button>
+                        </div>
+                      </form>
+                    </div>
                   </Modal>
                   <Modal
                     isOpen={deleteModalIsOpen}

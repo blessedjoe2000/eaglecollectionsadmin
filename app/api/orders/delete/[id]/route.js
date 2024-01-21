@@ -7,7 +7,6 @@ export async function DELETE(req, ctx) {
   await isAdminRequest();
 
   const { id } = ctx.params;
-  console.log("id", id);
   try {
     const order = await Order.findById(id);
 

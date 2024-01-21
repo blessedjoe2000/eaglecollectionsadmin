@@ -3,9 +3,6 @@ import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { Footer } from "@/components/Footer/Footer";
 import Nav from "@/components/Nav/Nav";
-// import Modal from "react-modal";
-
-// Modal.setAppElement("#__next");
 
 export const metadata = {
   title: "Eagle Collection Store Admin",
