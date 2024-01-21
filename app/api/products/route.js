@@ -2,6 +2,8 @@ import { mongooseConnect } from "@/lib/connectDb";
 import Product from "@/model/Product";
 import { isAdminRequest } from "../auth/[...nextauth]/route";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req) {
   //connected to database
   await mongooseConnect();

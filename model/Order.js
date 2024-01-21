@@ -10,6 +10,7 @@ const orderSchema = new mongoose.Schema(
     paid: { type: Boolean },
     size: { type: String },
     paid: { type: Boolean },
+    status: { type: String },
   },
   {
     timestamps: true,

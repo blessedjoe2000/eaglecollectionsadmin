@@ -66,7 +66,7 @@ export default function Products() {
               return (
                 <div
                   key={product._id}
-                  className="flex justify-between items-center py-1 border-b-2 border-light-pink"
+                  className="flex justify-between items-center py-1 border-b-2 border-light-pink "
                 >
                   <div>
                     <Image

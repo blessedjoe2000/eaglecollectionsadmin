@@ -8,10 +8,6 @@ const productSchema = new mongoose.Schema(
     },
     price: { type: Number, required: { true: "Enter product price" } },
     images: [{ type: String }],
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
     category: Array,
     newPrice: { type: Number },
     colors: { type: String },
