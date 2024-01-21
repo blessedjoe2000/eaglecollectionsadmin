@@ -8,12 +8,31 @@ import Spinner from "@/components/Spinner/Spinner";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import Modal from "react-modal";
+import toast from "react-hot-toast";
 
+export const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+};
 function Orders() {
   const [orders, setOrders] = useState([]);
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const router = useRouter();
+
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [orderStatus, setOrderStatus] = useState("");
+
+  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+  const [deleteOrderId, setDeleteOrderId] = useState(null);
 
   let pageId = pathname.split("/").pop();
 
@@ -28,19 +47,103 @@ function Orders() {
   const pagesRemaining = Math.ceil(orders.length % itemsPerPage);
 
   useEffect(() => {
-    getOrders();
-  }, [pageId]);
+    const fetchData = async () => {
+      if (!session) {
+        router.push("/login");
+      } else {
+        await getOrders();
+      }
+    };
 
-  useEffect(() => {
-    if (!session) {
-      router.push("/login");
-    }
-  }, [session, status, router]);
+    fetchData();
+  }, [session, status, router, pageId, orderStatus, deleteOrderId]);
 
   const dateToUSFormat = (dateString) => {
     const originalDate = new Date(dateString);
 
     return originalDate.toLocaleString("en-US");
+  };
+
+  let subtitle;
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    subtitle.style.color = "#f72585";
+  }
+
+  function closeModal() {
+    setModalIsOpen(false);
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!orderStatus) {
+      return toast.error("Status must be updated", {
+        style: {
+          border: "1px solid #f72585",
+          padding: "16px",
+          color: "#f72585",
+        },
+        iconTheme: {
+          primary: "#f72585",
+          secondary: "#FFFAEE",
+        },
+      });
+    }
+    await axios.patch(`/api/orders/edit/${selectedOrderId}`, { orderStatus });
+    setOrderStatus("");
+    toast.success("status updated", {
+      style: {
+        border: "1px solid #01B700",
+        padding: "16px",
+        color: "#01B700",
+      },
+      iconTheme: {
+        primary: "#01B700",
+        secondary: "#FFFAEE",
+      },
+    });
+    closeModal();
+  };
+
+  const handleEdit = (orderId) => {
+    setSelectedOrderId(orderId);
+    openModal();
+  };
+
+  const openDeleteModal = (orderId) => {
+    setDeleteModalIsOpen(true);
+    setDeleteOrderId(orderId);
+  };
+
+  function afterOpenDeleteModal() {
+    // references are now sync'd and can be accessed.
+    subtitle.style.color = "#f72585";
+  }
+
+  function closeDeleteModal() {
+    setDeleteModalIsOpen(false);
+  }
+
+  const handleDelete = async () => {
+    await axios.delete(`/api/orders/delete/${deleteOrderId}`);
+    toast.success("order deleted", {
+      style: {
+        border: "1px solid #01B700",
+        padding: "16px",
+        color: "#01B700",
+      },
+      iconTheme: {
+        primary: "#01B700",
+        secondary: "#FFFAEE",
+      },
+    });
+    closeDeleteModal();
   };
 
   if (!orders.length) {
@@ -60,18 +163,20 @@ function Orders() {
   }
 
   return (
-    <div className="mx-5 mb-10 mt-5">
+    <div className="mx-5 mb-10 mt-5 ">
       <h1 className="text-center text-light-green py-2">Orders Received</h1>
       <div className="">
-        <div className="flex justify-between items-center bg-dark-green text-white px-2 gap-2">
+        <div className="sm:flex justify-between items-center bg-dark-green text-white px-2 gap-2">
           <div>Date & Time</div>
-          <div>Recipients Info</div>
-          <div>Delivery Address</div>
-          <div>Products Ordered</div>
-          <div className="basis-0">Payment Confirmation</div>
+          <div>Recipients</div>
+          <div>Address</div>
+          <div>Products</div>
+          <div className="">Payment</div>
+          <div className="">Status</div>
+          <div className="">Action</div>
         </div>
 
-        <div className="">
+        <div className="sm:text-sm">
           {orders.length > 0 &&
             orders?.map((order, index) => (
               <div
@@ -130,8 +235,8 @@ function Orders() {
                   ))}
                 </div>
 
-                <div className="">
-                  {order.paid ? (
+                <div className="border-b-2 border-dark-green/30 sm:border-none ">
+                  {order?.paid ? (
                     <p
                       className="text-alert-green
                     "
@@ -142,9 +247,91 @@ function Orders() {
                     <p className="text-sharp-pink">No</p>
                   )}
                 </div>
+                <div className="border-b-2 border-dark-green/30 sm:border-none ">
+                  {order?.status && <p>{order.status}</p>}
+                </div>
+
+                <div className="sm:flex gap-1 flex-col justify-center items-center text-sm mt-1 ">
+                  <button
+                    onClick={() => handleEdit(order?._id)}
+                    className="btn-edit mr-1 "
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => openDeleteModal(order?._id)}
+                    className="btn-delete"
+                  >
+                    Delete
+                  </button>
+                </div>
+                <div className="hidden">
+                  <Modal
+                    isOpen={modalIsOpen}
+                    onAfterOpen={afterOpenModal}
+                    onRequestClose={closeModal}
+                    style={customStyles}
+                  >
+                    <h2 ref={(_subtitle) => (subtitle = _subtitle)}>
+                      Update Status
+                    </h2>
+                    <form onSubmit={handleSubmit}>
+                      <input
+                        type="text"
+                        name="status"
+                        placeholder="update status..."
+                        value={orderStatus}
+                        onChange={(e) => setOrderStatus(e.target.value)}
+                      />
+
+                      <div className="flex gap-1 text-sm">
+                        <button className="btn-save" type="submit">
+                          Save
+                        </button>
+                        <button className="btn-cancel" onClick={closeModal}>
+                          Close
+                        </button>
+                      </div>
+                    </form>
+                  </Modal>
+                  <Modal
+                    isOpen={deleteModalIsOpen}
+                    onAfterOpen={afterOpenDeleteModal}
+                    onRequestClose={closeDeleteModal}
+                    style={customStyles}
+                  >
+                    <div className="flex flex-col justify-center items-center font-bold">
+                      <h2
+                        className="text-xl"
+                        ref={(_subtitle) => (subtitle = _subtitle)}
+                      >
+                        Are you sure?
+                      </h2>
+                      <p className="font-bold py-1">
+                        Do you want to proceed to delete?
+                      </p>
+
+                      <div className="flex gap-1 text-sm">
+                        <button
+                          className="rounded-md bg-sharp-pink px-2 text-white"
+                          onClick={handleDelete}
+                        >
+                          Delete
+                        </button>
+                        <button
+                          className="btn-cancel "
+                          onClick={closeDeleteModal}
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                  </Modal>
+                </div>
               </div>
             ))}
         </div>
+
         <div className="flex justify-between mt-4">
           {pageId > 1 ? (
             <Link

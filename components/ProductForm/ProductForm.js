@@ -44,7 +44,7 @@ export default function ProductForm({
     "Accessories",
     "Bags",
     "Shoes and Bags",
-    "clutches",
+    "Clutches",
     "Belts",
     "Men Shoes",
     "Men Hats",

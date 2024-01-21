@@ -1,6 +1,8 @@
 import { mongooseConnect } from "@/lib/connectDb";
 import Order from "@/model/Order";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req) {
   //connected to database
   await mongooseConnect();
