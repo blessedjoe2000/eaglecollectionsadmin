@@ -292,8 +292,11 @@ function Orders() {
                     style={customStyles}
                   >
                     <div className="flex flex-col justify-center items-center">
-                      <h2 ref={(_subtitle) => (subtitle = _subtitle)}>
-                        Update Status
+                      <h2
+                        className=""
+                        ref={(_subtitle) => (subtitle = _subtitle)}
+                      >
+                        Update order status
                       </h2>
                       <form onSubmit={handleSubmit}>
                         <input
@@ -323,7 +326,7 @@ function Orders() {
                   >
                     <div className="flex flex-col justify-center items-center font-bold">
                       <h2
-                        className="text-xl"
+                        className="text-xl "
                         ref={(_subtitle) => (subtitle = _subtitle)}
                       >
                         Are you sure?
