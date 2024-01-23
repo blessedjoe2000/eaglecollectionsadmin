@@ -26,7 +26,7 @@ export async function GET(req, ctx) {
   const skipPage = (page - 1) * itemLimit;
 
   const orders = await Order.find()
-    .sort({ createdAt: -1 })
+    .sort({ updatedAt: -1 })
     .limit(itemLimit)
     .skip(skipPage);
 

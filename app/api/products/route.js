@@ -43,7 +43,7 @@ export async function GET(req) {
   await isAdminRequest();
 
   try {
-    const allProducts = await Product.find().sort({ createdAt: -1 });
+    const allProducts = await Product.find().sort({ updatedAt: -1 });
 
     return new Response(JSON.stringify(allProducts), { status: 200 });
   } catch (error) {
