@@ -37,7 +37,7 @@ export default function DeleteProduct() {
         secondary: "#FFFAEE",
       },
     });
-    router.push("/products");
+    router.push("/products/page/1");
   };
 
   return (
@@ -92,7 +92,7 @@ export default function DeleteProduct() {
         >
           Delete
         </button>
-        <Link href="/products" className="btn-cancel">
+        <Link href="/products/page/1" className="btn-cancel">
           Cancel
         </Link>
       </div>
