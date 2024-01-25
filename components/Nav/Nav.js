@@ -66,7 +66,7 @@ function Nav() {
               </div>
               <div>
                 <Link
-                  href="/products"
+                  href="/products/page/1"
                   className={
                     pathname.includes("/products") ? activeLink : inactiveLink
                   }

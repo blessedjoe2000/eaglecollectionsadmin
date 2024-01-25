@@ -37,16 +37,3 @@ export async function POST(req) {
     return new Response(JSON.stringify(error.message), { status: 500 });
   }
 }
-
-export async function GET(req) {
-  await mongooseConnect();
-  await isAdminRequest();
-
-  try {
-    const allProducts = await Product.find().sort({ updatedAt: -1 });
-
-    return new Response(JSON.stringify(allProducts), { status: 200 });
-  } catch (error) {
-    return new Response(JSON.stringify(error.message), { status: 500 });
-  }
-}
