@@ -79,6 +79,11 @@ export default function ProductForm({
     }
   };
 
+  const removePhotos = (imageLink) => {
+    const filteredImg = images.filter((imgLink) => imgLink !== imageLink);
+    setImages(filteredImg);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -164,7 +169,7 @@ export default function ProductForm({
         });
       }
 
-      router.push("/products");
+      router.push(`/products/page/1`);
     } catch (error) {
       console.log(error);
     }
@@ -236,10 +241,16 @@ export default function ProductForm({
         />
       </div>
       <label className="mt-4">Photos </label>
-      <div className="flex flex-wrap gap-1 mb-2">
+      <div className="flex flex-wrap gap-1 mb-2 ">
         {!!images?.length &&
           images.map((imgLink, index) => (
-            <div className=" h-24" key={index}>
+            <div className=" h-24 relative" key={index}>
+              <button
+                className="absolute right-0 bg-white/70  px-1 text-sharp-pink text-sm rounded-full"
+                onClick={() => removePhotos(imgLink)}
+              >
+                X
+              </button>
               <Image
                 src={imgLink}
                 alt="product image"
@@ -319,7 +330,7 @@ export default function ProductForm({
         >
           Save
         </button>
-        <Link href={"/products"} className="btn-cancel">
+        <Link href={"/products/page/1"} className="btn-cancel">
           Cancel
         </Link>
       </div>
