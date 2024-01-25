@@ -6,22 +6,30 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Spinner from "@/components/Spinner/Spinner";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Products() {
   const [allProducts, setAllProducts] = useState([]);
   const { data: session, status } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
+
+  let pageId = pathname.split("/").pop();
+
+  pageId = typeof pageId === "string" ? Number(pageId) : 1;
 
   const getAllProducts = async () => {
-    const response = await axios.get("/api/products");
+    const response = await axios.get(`/api/products/pages/${pageId}`);
     setAllProducts(response.data);
     return response.data;
   };
 
+  const itemsPerPage = 50;
+  const pagesRemaining = Math.ceil(allProducts.length % itemsPerPage);
+
   useEffect(() => {
     getAllProducts();
-  }, [allProducts]);
+  }, [pageId]);
 
   useEffect(() => {
     if (!session) {
@@ -66,7 +74,7 @@ export default function Products() {
               return (
                 <div
                   key={product._id}
-                  className="flex justify-between items-center py-1 border-b-2 border-light-pink "
+                  className="flex justify-between items-center py-1 border-b-2 border-light-green/70 "
                 >
                   <div>
                     <Image
@@ -127,6 +135,33 @@ export default function Products() {
                 </div>
               );
             })}
+        </div>
+
+        <div className="flex justify-between mt-4">
+          {pageId > 1 ? (
+            <Link
+              href={`/products/page/${pageId - 1}`}
+              className="bg-dark-green px-2 py-1 text-white rounded-md hover:text-light-green"
+            >
+              Previous
+            </Link>
+          ) : (
+            <div className="disabled bg-gray-300 px-2 py-1 text-white rounded-md cursor-not-allowed">
+              Previous
+            </div>
+          )}
+          {pagesRemaining != 0 ? (
+            <div className="disabled-link bg-gray-300 px-2 py-1 text-white rounded-md cursor-not-allowed">
+              Next
+            </div>
+          ) : (
+            <Link
+              href={`/products/page/${pageId + 1}`}
+              className="bg-dark-green px-2 py-1 text-white rounded-md hover:text-light-green"
+            >
+              Next
+            </Link>
+          )}
         </div>
       </div>
     </div>

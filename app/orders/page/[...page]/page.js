@@ -34,12 +34,14 @@ function Orders() {
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const [deleteOrderId, setDeleteOrderId] = useState(null);
 
+  const updateOrderStatus = ["Pending", "Processing", "Shipped", "Delivered"];
+
   let pageId = pathname.split("/").pop();
 
   pageId = typeof pageId === "string" ? Number(pageId) : 1;
 
   const getOrders = async () => {
-    const response = await axios.get(`/api/orders/ ${pageId}`);
+    const response = await axios.get(`/api/orders/${pageId}`);
 
     setOrders(response.data);
   };
@@ -299,13 +301,20 @@ function Orders() {
                         Update order status
                       </h2>
                       <form onSubmit={handleSubmit}>
-                        <input
-                          type="text"
-                          name="status"
-                          placeholder="update status..."
-                          value={orderStatus}
-                          onChange={(e) => setOrderStatus(e.target.value)}
-                        />
+                        <div>
+                          <select
+                            className="text-sm"
+                            value={orderStatus || ""}
+                            onChange={(e) => setOrderStatus(e.target.value)}
+                          >
+                            {updateOrderStatus &&
+                              updateOrderStatus?.map((statusValue, index) => (
+                                <option value={statusValue} key={index}>
+                                  {statusValue}
+                                </option>
+                              ))}
+                          </select>
+                        </div>
 
                         <div className="flex gap-1 text-sm items-center justify-center">
                           <button className="btn-save" type="submit">
