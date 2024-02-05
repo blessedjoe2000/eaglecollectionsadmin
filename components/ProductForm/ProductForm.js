@@ -112,6 +112,20 @@ export default function ProductForm({
       });
     }
 
+    if (!category || category.length === 0) {
+      return toast.error("Choose product category", {
+        style: {
+          border: "1px solid #f72585",
+          padding: "16px",
+          color: "#f72585",
+        },
+        iconTheme: {
+          primary: "#f72585",
+          secondary: "#FFFAEE",
+        },
+      });
+    }
+
     if (!price) {
       return toast.error("Price is required. Please enter price", {
         style: {
@@ -125,19 +139,7 @@ export default function ProductForm({
         },
       });
     }
-    if (category === "Uncategorized") {
-      return toast.error("Choose product category", {
-        style: {
-          border: "1px solid #f72585",
-          padding: "16px",
-          color: "#f72585",
-        },
-        iconTheme: {
-          primary: "#f72585",
-          secondary: "#FFFAEE",
-        },
-      });
-    }
+
     try {
       if (_id) {
         //update product
@@ -204,7 +206,9 @@ export default function ProductForm({
       </div>
 
       <div>
-        <label htmlFor="category">Choose Category</label>
+        <label htmlFor="category">
+          Choose Category<span className="required">*</span>
+        </label>
         <select
           className="text-sm"
           value={category || ""}
