@@ -31,15 +31,19 @@ export async function POST(request) {
     const binaryFile = await file.arrayBuffer();
     const fileBuffer = Buffer.from(binaryFile);
 
+    const awsAccessKey = process.env.AWS_S3_ACCESS_KEY;
+    const awsSecretAccessKey = process.env.AWS_S3_SECRET_ACCESS_KEY;
+
     const client = new S3Client({
       region: "us-west-1",
       credentials: {
-        accessKeyId: process.env.AWS_S3_ACCESS_KEY,
-        secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
+        accessKeyId: awsAccessKey,
+        secretAccessKey: awsSecretAccessKey,
       },
     });
 
-    const bucketName = "eaglecollections";
+    const bucketName = process.env.AWS_S3_BUCKET;
+
     const links = [];
 
     await client.send(
@@ -58,9 +62,6 @@ export async function POST(request) {
     return NextResponse.json({ links }, { status: 200 });
   } catch (e) {
     console.error("Error while trying to upload a file\n", e);
-    return NextResponse.json(
-      { error: "Something went wrong." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
