@@ -4,6 +4,7 @@ const nextConfig = {
     domains: [
       "lh3.googleusercontent.com",
       "eaglecollectionstore.s3.amazonaws.com",
+      "eaglecollections.s3.amazonaws.com",
     ],
   },
 };
