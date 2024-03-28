@@ -1,5 +1,4 @@
 import axios from "axios";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Spinner from "../Spinner/Spinner";
@@ -26,6 +25,7 @@ export default function ProductForm({
   const [sizes, setSizes] = useState(existingSizes || "");
   const [category, setCategory] = useState(existingCategory || []);
   const [isUploading, setIsUploading] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
 
   const router = useRouter();
 
@@ -171,10 +171,14 @@ export default function ProductForm({
         });
       }
 
-      router.push(`/products/page/1`);
+      router.back();
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const redirectBack = () => {
+    router.back();
   };
 
   return (
@@ -334,9 +338,9 @@ export default function ProductForm({
         >
           Save
         </button>
-        <Link href={"/products/page/1"} className="btn-cancel">
+        <button onClick={redirectBack} className="btn-cancel">
           Cancel
-        </Link>
+        </button>
       </div>
     </form>
   );

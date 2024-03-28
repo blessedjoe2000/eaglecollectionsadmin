@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 export default function DeleteProduct() {
   const router = useRouter();
   const pathname = usePathname();
+  // console.log("pathname", pathname);
   const id = pathname?.split("/").slice(-1)[0];
 
   const [product, setProduct] = useState(null);
@@ -37,7 +38,11 @@ export default function DeleteProduct() {
         secondary: "#FFFAEE",
       },
     });
-    router.push("/products/page/1");
+    router.back();
+  };
+
+  const redirectBack = () => {
+    router.back();
   };
 
   return (
@@ -92,9 +97,9 @@ export default function DeleteProduct() {
         >
           Delete
         </button>
-        <Link href="/products/page/1" className="btn-cancel">
+        <button onClick={redirectBack} className="btn-cancel">
           Cancel
-        </Link>
+        </button>
       </div>
     </div>
   );
