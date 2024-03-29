@@ -338,7 +338,7 @@ export default function ProductForm({
         >
           Save
         </button>
-        <button onClick={redirectBack} className="btn-cancel">
+        <button type="button" onClick={redirectBack} className="btn-cancel">
           Cancel
         </button>
       </div>
