@@ -2,7 +2,6 @@
 
 import axios from "axios";
 import Image from "next/image";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -10,7 +9,6 @@ import toast from "react-hot-toast";
 export default function DeleteProduct() {
   const router = useRouter();
   const pathname = usePathname();
-  // console.log("pathname", pathname);
   const id = pathname?.split("/").slice(-1)[0];
 
   const [product, setProduct] = useState(null);
@@ -46,12 +44,12 @@ export default function DeleteProduct() {
   };
 
   return (
-    <div className=" flex flex-col justify-center items-center gap-5 mt-5 mb-10">
+    <div className="flex flex-col justify-center items-center gap-5 mt-5 mb-10">
       <p className="font-bold text-light-green text-xl">
         Are you sure you want to delete?
       </p>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 mx-5">
         <div>
           <Image
             src={product?.images?.[0]}
