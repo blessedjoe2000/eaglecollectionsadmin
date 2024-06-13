@@ -80,7 +80,7 @@ export default function Products() {
                     <Image
                       src={product.images?.[0]}
                       alt={product.title}
-                      width={30}
+                      width={40}
                       height={20}
                       priority
                       className="rounded-sm"

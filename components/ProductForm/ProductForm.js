@@ -254,6 +254,7 @@ export default function ProductForm({
           images.map((imgLink, index) => (
             <div className=" h-24 relative" key={index}>
               <button
+                type="button"
                 className="absolute right-0 bg-white/70  px-1 text-sharp-pink text-sm rounded-full"
                 onClick={() => removePhotos(imgLink)}
               >
