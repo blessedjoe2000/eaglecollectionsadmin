@@ -222,7 +222,7 @@ function Orders() {
                         <Image
                           src={product.price_data.product_data.images?.[0]}
                           alt={`${product.price_data.product_data?.title}`}
-                          width={30}
+                          width={50}
                           height={20}
                           priority
                           className="rounded-sm"
