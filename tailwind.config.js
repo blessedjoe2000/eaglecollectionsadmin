@@ -30,6 +30,8 @@ module.exports = {
       fontFamily: {
         muktaFont: ["Mukta", "sans-serif"],
         robotoFont: ["Roboto", "sans-serif"],
+        rubikFont: ["Rubik", "Poppins", "Roboto"],
+        poppinsFont: ["Poppins", "Roboto", "sans-serif"],
       },
     },
   },

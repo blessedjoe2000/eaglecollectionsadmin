@@ -22,7 +22,7 @@ export default function EditProduct() {
 
   return (
     <div className="mx-5 mt-5 mb-10">
-      <h1 className=" text-light-green mb-2 ">Edit Product</h1>
+      <h2 className=" text-light-green mb-2 ">Edit Product</h2>
       {productInfo && <ProductForm {...productInfo} />}
     </div>
   );
