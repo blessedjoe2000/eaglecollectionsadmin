@@ -152,7 +152,7 @@ function Orders() {
   if (!orders.length) {
     return (
       <div className="my-10">
-        <p className="text-center font-bold">You do not have any order.</p>
+        <h2 className="text-center ">You do not have any order.</h2>
       </div>
     );
   }

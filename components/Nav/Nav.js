@@ -14,8 +14,8 @@ function Nav() {
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession();
 
-  const inactiveLink = "flex gap-1 text-white";
-  const activeLink = `flex gap-1 text-dark-green bg-white px-2 py-1 rounded-md`;
+  const inactiveLink = "flex gap-1 text-white font-poppinsFont";
+  const activeLink = `flex gap-1 text-dark-green bg-white px-2 py-1 rounded-md font-poppinsFont`;
   const inactiveIcon = "w-6 h-6";
   const activeIcon = `${inactiveIcon} "text-main-pink`;
 

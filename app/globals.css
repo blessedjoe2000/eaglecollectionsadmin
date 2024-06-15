@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Mukta:wght@500&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -17,8 +18,15 @@ table {
 }
 
 h1 {
-  @apply text-light-green mb-2 text-2xl;
+  @apply text-4xl font-rubikFont text-light-green;
 }
+h2 {
+  @apply font-rubikFont text-light-green text-3xl;
+}
+h3 {
+  @apply font-rubikFont text-light-green;
+}
+
 input,
 textarea,
 select {
@@ -52,10 +60,4 @@ select {
 
 a:hover {
   @apply text-light-green;
-}
-
-h1,
-h2,
-h3 {
-  @apply font-robotoFont text-main-pink text-center;
 }
