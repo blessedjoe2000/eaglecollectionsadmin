@@ -3,6 +3,7 @@ import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { Footer } from "@/components/Footer/Footer";
 import Nav from "@/components/Nav/Nav";
+import IFrame from "@/components/IFrame/IFrame";
 
 export const metadata = {
   title: "Eagle Collection Store Admin",
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
           <Toaster position="top-right" />
           <Nav />
           {children}
+          <IFrame />
           <Footer />
         </Provider>
       </body>

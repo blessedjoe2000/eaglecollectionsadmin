@@ -10,6 +10,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Modal from "react-modal";
 import toast from "react-hot-toast";
+import { revalidatePath } from "next/cache";
 
 export const customStyles = {
   content: {
@@ -147,6 +148,7 @@ function Orders() {
       },
     });
     closeDeleteModal();
+    revalidatePath(`/orders/page/${pageId}`);
   };
 
   if (!orders.length) {

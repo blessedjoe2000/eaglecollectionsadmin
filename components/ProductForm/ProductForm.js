@@ -4,6 +4,7 @@ import { useState } from "react";
 import Spinner from "../Spinner/Spinner";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import { UploadButton } from "@/lib/uploadthing";
 
 export default function ProductForm({
   _id,
@@ -25,7 +26,6 @@ export default function ProductForm({
   const [sizes, setSizes] = useState(existingSizes || "");
   const [category, setCategory] = useState(existingCategory || []);
   const [isUploading, setIsUploading] = useState(false);
-  const [isUpdated, setIsUpdated] = useState(false);
 
   const router = useRouter();
 
@@ -52,32 +52,6 @@ export default function ProductForm({
     "Dresses",
     "Men Fabrics",
   ];
-
-  const uploadImages = async (e) => {
-    const files = e?.target?.files;
-    setIsUploading(true);
-
-    if (!files) return;
-
-    const filesArray = Array.from(files);
-
-    if (filesArray?.length > 0) {
-      const formData = new FormData();
-
-      filesArray.forEach((file) => formData.append("file", file));
-
-      try {
-        const response = await axios.post(`/api/upload`, formData);
-        setIsUploading(false);
-
-        setImages((oldImages) => {
-          return [...oldImages, ...response.data.links];
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
 
   const removePhotos = (imageLink) => {
     const filteredImg = images.filter((imgLink) => imgLink !== imageLink);
@@ -248,14 +222,14 @@ export default function ProductForm({
           onChange={(e) => setSizes(e.target.value)}
         />
       </div>
-      <label className="mt-4">Photos </label>
-      <div className="flex flex-wrap gap-1 mb-2 ">
+
+      <div className="flex flex-wrap gap-1 mb-2">
         {!!images?.length &&
           images.map((imgLink, index) => (
-            <div className=" h-24 relative" key={index}>
+            <div className="h-24 relative" key={index}>
               <button
                 type="button"
-                className="absolute right-0 bg-white/70  px-1 text-sharp-pink text-sm rounded-full"
+                className="absolute right-0 bg-white/70 px-1 text-sharp-pink text-sm rounded-full"
                 onClick={() => removePhotos(imgLink)}
               >
                 X
@@ -269,39 +243,30 @@ export default function ProductForm({
               />
             </div>
           ))}
+
         {isUploading && (
-          <div className="h-24  p-2 flex items-center">
+          <div className="h-24 p-2 flex items-center">
             <Spinner />
           </div>
         )}
-        <label
-          htmlFor="images"
-          className=" w-22 h-24 cursor-pointer bg-gray-200 rounded-lg text-light-green p-2 flex flex-col justify-center items-center text-sm shadow-sm"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-            />
-          </svg>
-          Add image
-        </label>
 
-        <input
-          className="hidden"
-          name="images"
-          id="images"
-          type="file"
-          onChange={uploadImages}
-        ></input>
+        <UploadButton
+          endpoint="courseImage"
+          onUploadBegin={() => setIsUploading(true)}
+          onClientUploadComplete={(res) => {
+            setIsUploading(false);
+            if (res && res.length > 0) {
+              const imageUrls = res.map((img) => img.ufsUrl);
+              setImages((prev) => [...prev, ...imageUrls]);
+              toast.success("Upload complete!");
+            }
+          }}
+          onUploadError={(err) => {
+            setIsUploading(false);
+            toast.error("Upload failed");
+            console.error(err);
+          }}
+        />
       </div>
 
       <div>

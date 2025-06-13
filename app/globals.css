@@ -61,3 +61,20 @@ select {
 a:hover {
   @apply text-light-green;
 }
+
+.iframe-container {
+  position: fixed;
+  bottom: 20px; /* Adjust as needed */
+  right: 20px; /* Adjust as needed */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.iframe {
+  width: 300px;
+  height: 500px; /* Adjust height as necessary */
+  border: none;
+}
