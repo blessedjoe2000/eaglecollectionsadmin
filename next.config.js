@@ -7,6 +7,12 @@ const nextConfig = {
       "eaglecollections.s3.amazonaws.com",
     ],
   },
+
+  api: {
+    bodyParser: {
+      sizeLimit: "7mb", // Set limit to 7mb
+    },
+  },
 };
 
 module.exports = nextConfig;
