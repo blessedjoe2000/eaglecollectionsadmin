@@ -83,6 +83,7 @@ export default function Products() {
                       width={40}
                       height={20}
                       priority
+                      unoptimized
                       className="rounded-sm"
                     />
                   </div>
