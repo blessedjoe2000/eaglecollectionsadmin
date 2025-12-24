@@ -266,6 +266,7 @@ export default function ProductForm({
                 width={70}
                 height={50}
                 className="rounded-lg"
+                unoptimized
               />
             </div>
           ))}
