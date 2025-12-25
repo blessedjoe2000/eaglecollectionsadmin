@@ -225,6 +225,7 @@ function Orders() {
                           width={50}
                           height={20}
                           priority
+                          unoptimized
                           className="rounded-sm"
                         />
                       </div>
