@@ -187,17 +187,17 @@ function Orders() {
                 className="sm:border-b-2 sm:border-light-green py-2 sm:flex justify-between items-center gap-2 px-2 border-b-2 border-light-green "
               >
                 <div className="border-b-2 border-dark-green/30 sm:border-none ">
-                  <p>{dateToUSFormat(order.createdAt).split(",")[0]}</p>
-                  <p>{dateToUSFormat(order.createdAt).split(",")[1]}</p>
+                  <p>{dateToUSFormat(order.createdAt)?.split(",")[0]}</p>
+                  <p>{dateToUSFormat(order.createdAt)?.split(",")[1]}</p>
                 </div>
                 <div className="border-b-2 border-dark-green/30 sm:border-none ">
                   <p>
                     {" "}
-                    {order.name.split(" ")?.[0].slice(0, 1).toUpperCase() +
-                      order.name.split(" ")?.[0].slice(1) +
+                    {order.name.split(" ")?.[0]?.slice(0, 1).toUpperCase() +
+                      order.name.split(" ")?.[0]?.slice(1) +
                       " " +
-                      order.name.split(" ")?.[1].slice(0, 1).toUpperCase() +
-                      order.name.split(" ")?.[1].slice(1)}
+                      order.name.split(" ")?.[1]?.slice(0, 1).toUpperCase() +
+                      order.name.split(" ")?.[1]?.slice(1)}
                   </p>
                   <p>{order.email}</p>
                   <p>{order.phone}</p>

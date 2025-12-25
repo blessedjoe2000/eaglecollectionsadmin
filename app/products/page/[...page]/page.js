@@ -88,8 +88,8 @@ export default function Products() {
                     />
                   </div>
                   <div className="">
-                    {product.title.slice(0, 1).toUpperCase() +
-                      product.title.slice(1)}
+                    {product?.title?.slice(0, 1).toUpperCase() +
+                      product?.title?.slice(1)}
                   </div>
                   <div className="flex gap-2">
                     <Link
